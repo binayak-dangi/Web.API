@@ -1,10 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Web.API.Data;
+using Web.API.Services.Implementation;
+using Web.API.Services.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services
 builder.Services.AddControllers();
+builder.Services.AddScoped<IHRRoleService, HRRoleService>();
 //Add Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

@@ -15,14 +15,14 @@ namespace Web.API.DTOs
 
         public bool IsActive { get; set; }
 
-        public string CreatedBy { get; set; } = string.Empty;
+        public string Created_By { get; set; } = string.Empty;
 
-        public string UpdatedBy { get; set; } = string.Empty;
+        public string Updated_By { get; set; } = string.Empty;
 
-        public DateTime CreatedOn { get; set; }
+        public DateTime Created_On { get; set; } = DateTime.Now;
 
-        public DateTime UpdatedOn { get; set; }
+        public DateTime Updated_On { get; set; } = DateTime.Now;
 
-        public Guid IdGUID { get; set; }
+        public Guid IdGUID { get; set; } = Guid.NewGuid();
     }
 }
