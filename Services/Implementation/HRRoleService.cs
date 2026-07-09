@@ -27,6 +27,6 @@ namespace Web.API.Services.Implementation
             => UpdateAsync(dto);
 
         public Task<bool> DeleteRoleAsync(long id)
-            => DeleteAsync(id);
+            => SoftDeleteAsync(id);
     }
 }

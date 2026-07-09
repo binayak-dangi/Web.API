@@ -100,10 +100,11 @@ namespace MyTestMvc.Models
     {
         public long Id { get; set; }
         public bool IsActive { get; set; }
-        public string Created_By { get; set; }
-        public string Updated_By { get; set; }
-        public DateTime Created_On { get; set; }
-        public DateTime Updated_On { get; set; }
+        public bool IsDeleted { get; set; }= false;
+        public string Created_By { get; set; } = "Admin";
+        public string Updated_By { get; set; } = "Admin";
+        public DateTime Created_On { get; set; } = DateTime.Now;
+        public DateTime Updated_On { get; set; } = DateTime.Now;
         public Guid IdGUID { get; set; } = Guid.NewGuid();
     }
 

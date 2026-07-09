@@ -34,6 +34,28 @@ namespace Web.API.Controllers
             });
         }
 
+        [HttpGet("{id}", Name = "GetRoleById")]
+        public async Task<IActionResult> GetRoleById(long id)
+        {
+            var role = await _hrRoleService.GetRoleByIdAsync(id);
+            if (role == null)
+            {
+                return BadRequest(new ApiResponseModel<object>
+                {
+                    Success = false,
+                    Message = $"Invalid Role Id: {id}",
+                    Data = { }
+                });
+            }
+
+            return Ok(new ApiResponseModel<HRRoleDto>
+            {
+                Success = true,
+                Message = $"Roles is retrieved by Id: {id}",
+                Data = role
+            });
+        }
+
         [HttpPost(Name = "CreateRole")]
         public async Task<IActionResult> CreateRole([FromBody] HRRoleDto roleDto)
         {
@@ -49,7 +71,7 @@ namespace Web.API.Controllers
                     });
                 }
 
-                
+
 
                 var role = await _hrRoleService.CreateRoleAsync(roleDto);
 
@@ -69,6 +91,104 @@ namespace Web.API.Controllers
                     {
                         Success = false,
                         Message = ex.Message,
+                        Data = null
+                    });
+            }
+        }
+
+        [HttpPut("{id}", Name = "EditRole")]
+        public async Task<IActionResult> EditRole(long id, [FromBody] HRRoleDto roleDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        Message = "Invalid request.",
+                        Data = null
+                    });
+                }
+
+                roleDto.Id = id;   // Set the ID from the route
+
+                var role = await _hrRoleService.UpdateRoleAsync(roleDto);
+
+                if (role == null)
+                {
+                    return NotFound(new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        Message = $"Role with ID {id} not found.",
+                        Data = null
+                    });
+                }
+
+                return Ok(new ApiResponseModel<HRRoleDto>
+                {
+                    Success = true,
+                    Message = $"Role with ID {id} updated successfully.",
+                    Data = role
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating role.");
+
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        Message = "An unexpected error occurred.",
+                        Data = null
+                    });
+            }
+        }
+
+        [HttpDelete("{id}", Name = "DeleteRole")]
+        public async Task<IActionResult> DeleteRole(long id)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    return BadRequest(new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        Message = "Invalid Role Id.",
+                        Data = null
+                    });
+                }
+
+                var result = await _hrRoleService.DeleteRoleAsync(id);
+
+                if (!result)
+                {
+                    return NotFound(new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        Message = $"Role with Id {id} not found.",
+                        Data = null
+                    });
+                }
+
+                return Ok(new ApiResponseModel<object>
+                {
+                    Success = true,
+                    Message = $"Role with Id {id} deleted successfully.",
+                    Data = null
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while deleting role.");
+
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        Message = "An unexpected error occurred.",
                         Data = null
                     });
             }

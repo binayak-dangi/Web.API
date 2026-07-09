@@ -14,15 +14,5 @@ namespace Web.API.DTOs
         public string? Description { get; set; }
 
         public bool IsActive { get; set; }
-
-        public string Created_By { get; set; } = string.Empty;
-
-        public string Updated_By { get; set; } = string.Empty;
-
-        public DateTime Created_On { get; set; } = DateTime.Now;
-
-        public DateTime Updated_On { get; set; } = DateTime.Now;
-
-        public Guid IdGUID { get; set; } = Guid.NewGuid();
     }
 }
