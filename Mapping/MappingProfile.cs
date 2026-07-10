@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MyTestMvc.Models.Setup;
 using Web.API.DTOs;
+using Web.API.Models.DTOS;
 
 namespace Web.API.Mapping
 {
@@ -9,6 +10,7 @@ namespace Web.API.Mapping
         public MappingProfile()
         {
             CreateMap<HRRole, HRRoleDto>().ReverseMap();
+            CreateMap<HRBranch, HRBranchDto>().ReverseMap();
         }
     }
 }

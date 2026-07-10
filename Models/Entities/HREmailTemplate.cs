@@ -12,5 +12,7 @@ public partial class HREmailTemplate : CommonModel
     public string Body { get; set; } = null!;
 
     public bool IsHTML { get; set; }
+    public long IdHRCompany { get; set; }
+
 
 }

@@ -40,17 +40,19 @@ public partial class HREmployee : CommonModel
 
     public string? ImageGUID { get; set; }
 
-    public int? PasswordExpiryPeriod { get; set; }
+    public long? PasswordExpiryPeriod { get; set; }
 
     public string? PasswordHistory { get; set; }
 
     public DateTime? LastLoginDate { get; set; }
 
-    public int? LoginAttemptCount { get; set; }
+    public long? LoginAttemptCount { get; set; }
 
     public string? PasswordResetToken { get; set; }
 
     public DateTime? PasswordResetTokenExpiry { get; set; }
+    public long IdHRCompany { get; set; }
+
 
     public virtual HRRole HRRole { get; set; } = null!;
 

@@ -82,19 +82,26 @@ namespace Web.API.Services.CommonService.Implementation
 
 
         // Soft Delete
-        public virtual async Task<bool> SoftDeleteAsync(long id)
+        public virtual async Task<TDto?> SoftDeleteAsync(long id)
         {
             var entity = await _dbSet
                 .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
 
             if (entity == null)
-                return false;
+                return default;
+
+            // Map before updating if you want the original values
+            var deletedDto = _mapper.Map<TDto>(entity);
 
             entity.IsDeleted = true;
 
             await _context.SaveChangesAsync();
 
-            return true;
+            // If you want the returned DTO to show IsDeleted = true,
+            // map after SaveChanges instead:
+            // deletedDto = _mapper.Map<TDto>(entity);
+
+            return deletedDto;
         }
     }
 }

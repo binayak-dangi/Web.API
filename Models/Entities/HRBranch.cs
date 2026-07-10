@@ -12,6 +12,8 @@ public partial class HRBranch : CommonModel
     public string? PhoneNo { get; set; }
 
     public string? BMEmailID { get; set; }
+    public long IdHRCompany { get; set; }
+
 
     public virtual ICollection<HREmployee> HREmployees { get; set; } = [];
 

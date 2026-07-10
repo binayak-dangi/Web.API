@@ -2,62 +2,63 @@
 using Web.API.DTOs;
 using Web.API.Models;
 using Web.API.Models.Common;
+using Web.API.Models.DTOS;
 using Web.API.Services.Interface;
 
 namespace Web.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class HRRoleController : ControllerBase
+    public class HRBranchController : ControllerBase
     {
-        private readonly ILogger<HRRoleController> _logger;
-        private readonly IHRRoleService _hrRoleService;
+        private readonly ILogger<HRBranchController> _logger;
+        private readonly IHRBranchService _hrBranchService;
 
-        public HRRoleController(
-            ILogger<HRRoleController> logger,
-            IHRRoleService hrRoleService)
+        public HRBranchController(
+            ILogger<HRBranchController> logger,
+            IHRBranchService hrBranchService)
         {
             _logger = logger;
-            _hrRoleService = hrRoleService;
+            _hrBranchService = hrBranchService;
         }
 
-        [HttpGet(Name = "GetRoles")]
-        public async Task<IActionResult> GetRole()
+        [HttpGet(Name = "GetBranches")]
+        public async Task<IActionResult> GetBranches()
         {
-            var roles = await _hrRoleService.GetAllRolesAsync();
+            var branches = await _hrBranchService.GetAllBranchesAsync();
 
-            return Ok(new ApiResponseModel<List<HRRoleDto>>
+            return Ok(new ApiResponseModel<List<HRBranchDto>>
             {
                 Success = true,
-                Message = "Roles retrieved successfully.",
-                Data = roles
+                Message = "Branches retrieved successfully.",
+                Data = branches
             });
         }
 
-        [HttpGet("{id}", Name = "GetRoleById")]
-        public async Task<IActionResult> GetRoleById(long id)
+        [HttpGet("{id}", Name = "GetBranchById")]
+        public async Task<IActionResult> GetBranchById(long id)
         {
-            var role = await _hrRoleService.GetRoleByIdAsync(id);
-            if (role == null)
+            var branch = await _hrBranchService.GetBranchByIdAsync(id);
+            if (branch == null)
             {
                 return BadRequest(new ApiResponseModel<object>
                 {
                     Success = false,
-                    Message = $"Invalid Role Id: {id}",
+                    Message = $"Invalid Branch Id: {id}",
                     Data = { }
                 });
             }
 
-            return Ok(new ApiResponseModel<HRRoleDto>
+            return Ok(new ApiResponseModel<HRBranchDto>
             {
                 Success = true,
-                Message = $"Roles is retrieved by Id: {id}",
-                Data = role
+                Message = $"Branch is retrieved by Id: {id}",
+                Data = branch
             });
         }
 
-        [HttpPost(Name = "CreateRole")]
-        public async Task<IActionResult> CreateRole([FromBody] HRRoleDto roleDto)
+        [HttpPost(Name = "CreateBranch")]
+        public async Task<IActionResult> CreateBranch([FromBody] HRBranchDto branchDto)
         {
             try
             {
@@ -73,18 +74,18 @@ namespace Web.API.Controllers
 
 
 
-                var role = await _hrRoleService.CreateRoleAsync(roleDto);
+                var branch = await _hrBranchService.CreateBranchAsync(branchDto);
 
-                return Ok(new ApiResponseModel<HRRoleDto>
+                return Ok(new ApiResponseModel<HRBranchDto>
                 {
                     Success = true,
-                    Message = "Role created successfully.",
-                    Data = role
+                    Message = "Branch created successfully.",
+                    Data = branch
                 });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while creating role.");
+                _logger.LogError(ex, "Error occurred while creating branch.");
 
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     new ApiResponseModel<object>
@@ -96,8 +97,8 @@ namespace Web.API.Controllers
             }
         }
 
-        [HttpPut("{id}", Name = "EditRole")]
-        public async Task<IActionResult> EditRole(long id, [FromBody] HRRoleDto roleDto)
+        [HttpPut("{id}", Name = "EditBranch")]
+        public async Task<IActionResult> EditBranch(long id, [FromBody] HRBranchDto branchDto)
         {
             try
             {
@@ -111,25 +112,25 @@ namespace Web.API.Controllers
                     });
                 }
 
-                roleDto.Id = id;   // Set the ID from the route
+                branchDto.Id = id;   // Set the ID from the route
 
-                var role = await _hrRoleService.UpdateRoleAsync(roleDto);
+                var branch = await _hrBranchService.UpdateBranchAsync(branchDto);
 
-                if (role == null)
+                if (branch == null)
                 {
                     return NotFound(new ApiResponseModel<object>
                     {
                         Success = false,
-                        Message = $"Role with ID {id} not found.",
+                        Message = $"Branch with ID {id} not found.",
                         Data = null
                     });
                 }
 
-                return Ok(new ApiResponseModel<HRRoleDto>
+                return Ok(new ApiResponseModel<HRBranchDto>
                 {
                     Success = true,
-                    Message = $"Role with ID {id} updated successfully.",
-                    Data = role
+                    Message = $"Branch with ID {id} updated successfully.",
+                    Data = branch
                 });
             }
             catch (Exception ex)
@@ -146,8 +147,8 @@ namespace Web.API.Controllers
             }
         }
 
-        [HttpDelete("{id}", Name = "DeleteRole")]
-        public async Task<IActionResult> DeleteRole(long id)
+        [HttpDelete("{id}", Name = "DeleteBranch")]
+        public async Task<IActionResult> DeleteBranch(long id)
         {
             try
             {
@@ -156,39 +157,39 @@ namespace Web.API.Controllers
                     return BadRequest(new ApiResponseModel<object>
                     {
                         Success = false,
-                        Message = "Invalid Role Id.",
+                        Message = "Invalid Branch Id.",
                         Data = null
                     });
                 }
 
-                var deletedRole = await _hrRoleService.DeleteRoleAsync(id);
+                var deletedBranch = await _hrBranchService.DeleteBranchAsync(id);
 
-                if (deletedRole == null)
+                if (deletedBranch == null)
                 {
                     return NotFound(new ApiResponseModel<object>
                     {
                         Success = false,
-                        Message = $"Role with Id {id} not found.",
+                        Message = $"Branch with Id {id} not found.",
                         Data = null
                     });
                 }
 
-                return Ok(new ApiResponseModel<HRRoleDto>
+                return Ok(new ApiResponseModel<HRBranchDto>
                 {
                     Success = true,
-                    Message = $"Role with Id {id} deleted successfully.",
-                    Data = deletedRole
+                    Message = $"Branch with Id {id} deleted successfully.",
+                    Data = deletedBranch
                 });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while deleting role with Id {RoleId}.", id);
+                _logger.LogError(ex, "Error occurred while deleting branch with Id {BranchId}.", id);
 
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     new ApiResponseModel<object>
                     {
                         Success = false,
-                        Message = "An unexpected error occurred while deleting the role.",
+                        Message = "An unexpected error occurred.",
                         Data = null
                     });
             }

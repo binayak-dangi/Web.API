@@ -13,6 +13,8 @@ public partial class HRRolePermissionLink : CommonModel
     public bool EditOnly { get; set; }
 
     public bool DeleteOnly { get; set; }
+    public long IdHRCompany { get; set; }
+
 
     public virtual HRPermission HRPermission { get; set; } = null!;
 

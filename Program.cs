@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services
 builder.Services.AddControllers();
 builder.Services.AddScoped<IHRRoleService, HRRoleService>();
+builder.Services.AddScoped<IHRBranchService, HRBranchService>();
 //Add Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

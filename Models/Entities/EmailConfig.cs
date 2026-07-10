@@ -12,6 +12,8 @@ public partial class EmailConfig : CommonModel
     public string? CCMail { get; set; }
 
     public bool BranchFilter { get; set; }
+    public long IdHRCompany { get; set; }
+
 
     public virtual HREmailTemplate HREmailTemplate { get; set; } = null!;
 }

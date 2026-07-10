@@ -17,11 +17,11 @@ public partial class EmailHistory : CommonModel
 
     public bool IsHTML { get; set; }
 
-    public int Priority { get; set; }
+    public long Priority { get; set; }
 
-    public int FailureAttempt { get; set; }
+    public long FailureAttempt { get; set; }
 
-    public int SuccessAttempt { get; set; }
+    public long SuccessAttempt { get; set; }
 
     public string ToEmail { get; set; } = null!;
 
@@ -34,4 +34,6 @@ public partial class EmailHistory : CommonModel
     public string? AlternateEmailBody { get; set; }
 
     public string? TemplateData { get; set; }
+    public long IdHRCompany { get; set; }
+
 }

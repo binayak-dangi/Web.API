@@ -8,6 +8,8 @@ public partial class ActivityLog
     public long Id { get; set; }
     public long IdEmployee { get; set; }
 
+    public long IdHRCompany { get; set; }
+
     public string Username { get; set; } = null!;
 
     public string Action { get; set; } = null!;

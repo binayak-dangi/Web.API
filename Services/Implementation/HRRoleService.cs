@@ -26,7 +26,7 @@ namespace Web.API.Services.Implementation
         public Task<HRRoleDto?> UpdateRoleAsync(HRRoleDto dto)
             => UpdateAsync(dto);
 
-        public Task<bool> DeleteRoleAsync(long id)
+        public Task<HRRoleDto> DeleteRoleAsync(long id)
             => SoftDeleteAsync(id);
     }
 }

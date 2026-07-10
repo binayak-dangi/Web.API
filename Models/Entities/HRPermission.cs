@@ -25,6 +25,8 @@ public partial class HRPermission : CommonModel
 
     public string? FontIcon { get; set; }
     public string? AreaIcon { get; set; }
+    public long IdHRCompany { get; set; }
+
 
 
     public virtual ICollection<HRRolePermissionLink> HRRolePermissionLinks { get; set; } = [];

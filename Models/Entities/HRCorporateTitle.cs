@@ -24,6 +24,8 @@ namespace Web.API.Entities
         public string ShortName { get; set; } = string.Empty;
 
         public string ClientIP { get; set; } = string.Empty;
+        public long IdHRCompany { get; set; }
+
         public virtual ICollection<HREmployee> HREmployees { get; set; } = new List<HREmployee>();
     }
 }
