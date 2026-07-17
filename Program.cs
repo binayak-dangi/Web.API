@@ -18,9 +18,10 @@ builder.Services.AddScoped<IHRCompanyService, HRCompanyService>();
 builder.Services.AddScoped<IHREmployeeService, HREmployeeService>();
 builder.Services.AddScoped<IHRCorporateTitleService, HRCorporateTitleService>();
 builder.Services.AddScoped<IHRFunctionalTitleService, HRFunctionalTitleService>();
-builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+builder.Services.AddScoped<IHRPermissionService, HRPermissionService>();
 //Add Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -83,10 +84,13 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["Jwt:Audience"],
 
         IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(
-                builder.Configuration["Jwt:Key"]!
-            )
-        )
+         Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
+     ),
+
+
+        // Removes the default 5-minute grace period.
+        // The JWT becomes invalid immediately when its expiration time (exp) is reached.
+        ClockSkew = TimeSpan.Zero
     };
 
     options.Events = new JwtBearerEvents

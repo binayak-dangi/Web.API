@@ -1,7 +1,7 @@
 ﻿using MyTestMvc.Models.Setup;
 using Web.API.Models.DTOS;
 
-public interface IAccountService
+public interface IAuthService
 {
     Task<LoginResponseDto?> LoginAsync(LoginRequestDto request);
 

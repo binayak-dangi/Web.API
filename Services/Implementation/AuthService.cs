@@ -3,16 +3,13 @@ using Web.API.Services.Interface;
 
 namespace Web.API.Services.Implementation
 {
-    public class AccountService : IAccountService
+    public class AuthService : IAuthService
     {
         private readonly IHREmployeeService _employeeService;
         private readonly IJwtService _jwtService;
         private readonly IRefreshTokenService _refreshTokenService;
 
-        public AccountService(
-            IHREmployeeService employeeService,
-            IJwtService jwtService,
-            IRefreshTokenService refreshTokenService)
+        public AuthService(IHREmployeeService employeeService,IJwtService jwtService,IRefreshTokenService refreshTokenService)
         {
             _employeeService = employeeService;
             _jwtService = jwtService;
@@ -27,14 +24,19 @@ namespace Web.API.Services.Implementation
                 return null;
 
             var accessToken = _jwtService.GenerateAccessToken(employee);
-
             var refreshToken = await _refreshTokenService.CreateToken(employee.Id);
 
             return new LoginResponseDto
             {
                 AccessToken = accessToken,
                 RefreshToken = refreshToken.Token,
-                ExpiresAt = DateTime.UtcNow.AddMinutes(30)
+                ExpiresAt = refreshToken.Expires,
+                Employee = new HREmployeeDto
+                {
+                    Id = employee.Id,
+                    Username = employee.Username,
+                    Email = employee.Email ?? string.Empty
+                }
             };
         }
 
@@ -42,10 +44,7 @@ namespace Web.API.Services.Implementation
         {
             var token = await _refreshTokenService.GetToken(refreshToken);
 
-            if (token == null)
-                return null;
-
-            if (token.IsRevoked || token.Expires <= DateTime.UtcNow)
+            if (token == null || token.IsRevoked || token.Expires <= DateTime.UtcNow)
                 return null;
 
             var accessToken = _jwtService.GenerateAccessToken(token.Employee);
@@ -55,7 +54,13 @@ namespace Web.API.Services.Implementation
             {
                 AccessToken = accessToken,
                 RefreshToken = newRefreshToken.Token,
-                ExpiresAt = DateTime.UtcNow.AddMinutes(30)
+                ExpiresAt = newRefreshToken.Expires,
+                Employee = new HREmployeeDto
+                {
+                    Id = token.Employee.Id,
+                    Username = token.Employee.Username,
+                    Email = token.Employee.Email ?? string.Empty
+                }
             };
         }
 

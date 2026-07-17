@@ -16,6 +16,7 @@ namespace Web.API.Mapping
             CreateMap<HREmployee, HREmployeeDto>().ReverseMap();
             CreateMap<HRCorporateTitle, HRCorporateTitleDto>().ReverseMap();
             CreateMap<HRFunctionalTitle, HRFunctionalTitleDto>().ReverseMap();
+            CreateMap<HRPermission, HRPermissionDto>().ReverseMap();
         }
     }
 }

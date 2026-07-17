@@ -10,7 +10,7 @@ namespace Web.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    //[Authorize]
+    [Authorize]
     public class HREmployeeController : ControllerBase
     {
         private readonly ILogger<HREmployeeController> _logger;

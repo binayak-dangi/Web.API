@@ -18,16 +18,31 @@ namespace Web.API.Services.Implementation
 
         public async Task<RefreshToken> CreateToken(long idEmployee)
         {
+            // Revoke existing active refresh tokens
+            var activeTokens = await _context.RefreshToken
+                .Where(x => x.IDHREmployee == idEmployee &&
+                            !x.IsRevoked &&
+                            x.Expires > DateTime.UtcNow)
+                .ToListAsync();
+
+            foreach (var token in activeTokens)
+            {
+                token.IsRevoked = true;
+                token.Revoked = DateTime.UtcNow;
+            }
+
+            // Create a new refresh token
             var refreshToken = new RefreshToken
             {
                 IDHREmployee = idEmployee,
                 Token = _jwtService.GenerateRefreshToken(),
                 Created = DateTime.UtcNow,
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddDays(1),
                 IsRevoked = false
             };
 
             _context.RefreshToken.Add(refreshToken);
+
             await _context.SaveChangesAsync();
 
             return refreshToken;
@@ -48,10 +63,14 @@ namespace Web.API.Services.Implementation
             if (refreshToken == null)
                 return false;
 
+            if (refreshToken.IsRevoked)
+                return false;
+
             refreshToken.IsRevoked = true;
             refreshToken.Revoked = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
+
             return true;
         }
 
