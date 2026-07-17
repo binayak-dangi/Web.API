@@ -2,7 +2,7 @@
 using MyTestMvc.Models.Setup;
 using System;
 
-namespace Web.API.Entities
+namespace Web.API.Models.Entities
 {
     public class HRCorporateTitle:CommonModel
     {

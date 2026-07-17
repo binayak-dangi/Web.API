@@ -11,54 +11,54 @@ namespace Web.API.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class HRBranchController : ControllerBase
+    public class HRFunctionalTitleController : ControllerBase
     {
-        private readonly ILogger<HRBranchController> _logger;
-        private readonly IHRBranchService _hrBranchService;
+        private readonly ILogger<HRFunctionalTitleController> _logger;
+        private readonly IHRFunctionalTitleService _hrFunctionalTitleService;
 
-        public HRBranchController(ILogger<HRBranchController> logger,IHRBranchService hrBranchService)
+        public HRFunctionalTitleController(ILogger<HRFunctionalTitleController> logger,IHRFunctionalTitleService hrFunctionalTitleService)
         {
             _logger = logger;
-            _hrBranchService = hrBranchService;
+            _hrFunctionalTitleService = hrFunctionalTitleService;
         }
 
-        [HttpGet(Name = "GetBranches")]
-        public async Task<IActionResult> GetBranches()
+        [HttpGet(Name = "GetFunctionalTitles")]
+        public async Task<IActionResult> GetFunctionalTitles()
         {
-            var branches = await _hrBranchService.GetAllBranchesAsync();
+            var functionalTitles = await _hrFunctionalTitleService.GetAllFunctionalTitlesAsync();
 
-            return Ok(new ApiResponseModel<List<HRBranchDto>>
+            return Ok(new ApiResponseModel<List<HRFunctionalTitleDto>>
             {
                 Success = true,
-                Message = "Branches retrieved successfully.",
-                Data = branches
+                Message = "Functional titles retrieved successfully.",
+                Data = functionalTitles
             });
         }
 
-        [HttpGet("{id}", Name = "GetBranchById")]
-        public async Task<IActionResult> GetBranchById(long id)
+        [HttpGet("{id}", Name = "GetFunctionalTitleById")]
+        public async Task<IActionResult> GetFunctionalTitleById(long id)
         {
-            var branch = await _hrBranchService.GetBranchByIdAsync(id);
-            if (branch == null)
+            var functionalTitle = await _hrFunctionalTitleService.GetFunctionalTitleByIdAsync(id);
+            if (functionalTitle == null)
             {
                 return BadRequest(new ApiResponseModel<object>
                 {
                     Success = false,
-                    Message = $"Invalid Branch Id: {id}",
+                    Message = $"Invalid Functional Title Id: {id}",
                     Data = { }
                 });
             }
 
-            return Ok(new ApiResponseModel<HRBranchDto>
+            return Ok(new ApiResponseModel<HRFunctionalTitleDto>
             {
                 Success = true,
-                Message = $"Branch is retrieved by Id: {id}",
-                Data = branch
+                Message = $"Functional Title is retrieved by Id: {id}",
+                Data = functionalTitle
             });
         }
 
-        [HttpPost(Name = "CreateBranch")]
-        public async Task<IActionResult> CreateBranch([FromBody] HRBranchDto branchDto)
+        [HttpPost(Name = "CreateFunctionalTitle")]
+        public async Task<IActionResult> CreateFunctionalTitle([FromBody] HRFunctionalTitleDto functionalTitleDto)
         {
             try
             {
@@ -72,15 +72,13 @@ namespace Web.API.Controllers
                     });
                 }
 
+                var functionalTitle = await _hrFunctionalTitleService.CreateFunctionalTitleAsync(functionalTitleDto);
 
-
-                var branch = await _hrBranchService.CreateBranchAsync(branchDto);
-
-                return Ok(new ApiResponseModel<HRBranchDto>
+                return Ok(new ApiResponseModel<HRFunctionalTitleDto>
                 {
                     Success = true,
-                    Message = "Branch created successfully.",
-                    Data = branch
+                    Message = "Functional title created successfully.",
+                    Data = functionalTitle
                 });
             }
             catch (Exception ex)
@@ -97,8 +95,8 @@ namespace Web.API.Controllers
             }
         }
 
-        [HttpPut("{id}", Name = "EditBranch")]
-        public async Task<IActionResult> EditBranch(long id, [FromBody] HRBranchDto branchDto)
+        [HttpPut("{id}", Name = "EditFunctionalTitle")]
+        public async Task<IActionResult> EditFunctionalTitle(long id, [FromBody] HRFunctionalTitleDto functionalTitleDto)
         {
             try
             {
@@ -112,30 +110,30 @@ namespace Web.API.Controllers
                     });
                 }
 
-                branchDto.Id = id;   // Set the ID from the route
+                functionalTitleDto.Id = id;   // Set the ID from the route
 
-                var branch = await _hrBranchService.UpdateBranchAsync(branchDto);
+                var functionalTitle = await _hrFunctionalTitleService.UpdateFunctionalTitleAsync(functionalTitleDto);
 
-                if (branch == null)
+                if (functionalTitle == null)
                 {
                     return NotFound(new ApiResponseModel<object>
                     {
                         Success = false,
-                        Message = $"Branch with ID {id} not found.",
+                        Message = $"Functional Title with ID {id} not found.",
                         Data = null
                     });
                 }
 
-                return Ok(new ApiResponseModel<HRBranchDto>
+                return Ok(new ApiResponseModel<HRFunctionalTitleDto>
                 {
                     Success = true,
-                    Message = $"Branch with ID {id} updated successfully.",
-                    Data = branch
+                    Message = $"Functional Title with ID {id} updated successfully.",
+                    Data = functionalTitle
                 });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error updating role.");
+                _logger.LogError(ex, "Error updating functional title.");
 
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     new ApiResponseModel<object>
@@ -147,8 +145,8 @@ namespace Web.API.Controllers
             }
         }
 
-        [HttpDelete("{id}", Name = "DeleteBranch")]
-        public async Task<IActionResult> DeleteBranch(long id)
+        [HttpDelete("{id}", Name = "DeleteFunctionalTitle")]
+        public async Task<IActionResult> DeleteFunctionalTitle(long id)
         {
             try
             {
@@ -157,33 +155,33 @@ namespace Web.API.Controllers
                     return BadRequest(new ApiResponseModel<object>
                     {
                         Success = false,
-                        Message = "Invalid Branch Id.",
+                        Message = "Invalid Functional Title Id.",
                         Data = null
                     });
                 }
 
-                var deletedBranch = await _hrBranchService.DeleteBranchAsync(id);
+                var deletedFunctionalTitle = await _hrFunctionalTitleService.DeleteFunctionalTitleAsync(id);
 
-                if (deletedBranch == null)
+                if (deletedFunctionalTitle == null)
                 {
                     return NotFound(new ApiResponseModel<object>
                     {
                         Success = false,
-                        Message = $"Branch with Id {id} not found.",
+                        Message = $"Functional Title with Id {id} not found.",
                         Data = null
                     });
                 }
 
-                return Ok(new ApiResponseModel<HRBranchDto>
+                return Ok(new ApiResponseModel<HRFunctionalTitleDto>
                 {
                     Success = true,
-                    Message = $"Branch with Id {id} deleted successfully.",
-                    Data = deletedBranch
+                    Message = $"Functional Title with Id {id} deleted successfully.",
+                    Data = deletedFunctionalTitle
                 });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while deleting branch with Id {BranchId}.", id);
+                _logger.LogError(ex, "Error occurred while deleting functional title with Id {FunctionalTitleId}.", id);
 
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     new ApiResponseModel<object>

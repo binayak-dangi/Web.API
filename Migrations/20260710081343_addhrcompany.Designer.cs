@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Web.API.Data;
 
@@ -11,9 +12,11 @@ using Web.API.Data;
 namespace Web.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260710081343_addhrcompany")]
+    partial class addhrcompany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -150,6 +153,18 @@ namespace Web.API.Migrations
                     b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("HRBranchId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("HRCorporateTitleId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("HRFunctionalTitleId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("HRRoleId")
+                        .HasColumnType("bigint");
+
                     b.Property<Guid>("IdGUID")
                         .HasColumnType("uniqueidentifier");
 
@@ -230,13 +245,13 @@ namespace Web.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdHRBranch");
+                    b.HasIndex("HRBranchId");
 
-                    b.HasIndex("IdHRCorporateTitle");
+                    b.HasIndex("HRCorporateTitleId");
 
-                    b.HasIndex("IdHRFunctionalTitle");
+                    b.HasIndex("HRFunctionalTitleId");
 
-                    b.HasIndex("IdHRRole");
+                    b.HasIndex("HRRoleId");
 
                     b.ToTable("HREmployee");
                 });
@@ -484,7 +499,7 @@ namespace Web.API.Migrations
                     b.ToTable("HRRolePermissionLink");
                 });
 
-            modelBuilder.Entity("Web.API.Models.Entities.HRCorporateTitle", b =>
+            modelBuilder.Entity("Web.API.Entities.HRCorporateTitle", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -554,7 +569,7 @@ namespace Web.API.Migrations
                     b.ToTable("HRCorporateTitle");
                 });
 
-            modelBuilder.Entity("Web.API.Models.Entities.HRFunctionalTitle", b =>
+            modelBuilder.Entity("Web.API.Entities.HRFunctionalTitle", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -612,63 +627,29 @@ namespace Web.API.Migrations
                     b.ToTable("HRFunctionalTitle");
                 });
 
-            modelBuilder.Entity("Web.API.Models.Entities.RefreshToken", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Expires")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("IDHREmployee")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("IsRevoked")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("Revoked")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IDHREmployee");
-
-                    b.ToTable("RefreshToken");
-                });
-
             modelBuilder.Entity("MyTestMvc.Models.Setup.HREmployee", b =>
                 {
                     b.HasOne("MyTestMvc.Models.Setup.HRBranch", "HRBranch")
                         .WithMany("HREmployees")
-                        .HasForeignKey("IdHRBranch")
+                        .HasForeignKey("HRBranchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Web.API.Models.Entities.HRCorporateTitle", "HRCorporateTitle")
+                    b.HasOne("Web.API.Entities.HRCorporateTitle", "HRCorporateTitle")
                         .WithMany("HREmployees")
-                        .HasForeignKey("IdHRCorporateTitle")
+                        .HasForeignKey("HRCorporateTitleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Web.API.Models.Entities.HRFunctionalTitle", "HRFunctionalTitle")
+                    b.HasOne("Web.API.Entities.HRFunctionalTitle", "HRFunctionalTitle")
                         .WithMany("HREmployees")
-                        .HasForeignKey("IdHRFunctionalTitle")
+                        .HasForeignKey("HRFunctionalTitleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MyTestMvc.Models.Setup.HRRole", "HRRole")
                         .WithMany("HREmployees")
-                        .HasForeignKey("IdHRRole")
+                        .HasForeignKey("HRRoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -684,7 +665,7 @@ namespace Web.API.Migrations
             modelBuilder.Entity("MyTestMvc.Models.Setup.HREmployeePermissionLink", b =>
                 {
                     b.HasOne("MyTestMvc.Models.Setup.HREmployee", "HREmployee")
-                        .WithMany()
+                        .WithMany("HREmployeePermissionLink")
                         .HasForeignKey("HREmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -723,17 +704,6 @@ namespace Web.API.Migrations
                     b.Navigation("HRRole");
                 });
 
-            modelBuilder.Entity("Web.API.Models.Entities.RefreshToken", b =>
-                {
-                    b.HasOne("MyTestMvc.Models.Setup.HREmployee", "Employee")
-                        .WithMany("RefreshTokens")
-                        .HasForeignKey("IDHREmployee")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
-                });
-
             modelBuilder.Entity("MyTestMvc.Models.Setup.HRBranch", b =>
                 {
                     b.Navigation("HREmployees");
@@ -741,7 +711,7 @@ namespace Web.API.Migrations
 
             modelBuilder.Entity("MyTestMvc.Models.Setup.HREmployee", b =>
                 {
-                    b.Navigation("RefreshTokens");
+                    b.Navigation("HREmployeePermissionLink");
                 });
 
             modelBuilder.Entity("MyTestMvc.Models.Setup.HRPermission", b =>
@@ -761,12 +731,12 @@ namespace Web.API.Migrations
                     b.Navigation("HREmployeePermissionLinks");
                 });
 
-            modelBuilder.Entity("Web.API.Models.Entities.HRCorporateTitle", b =>
+            modelBuilder.Entity("Web.API.Entities.HRCorporateTitle", b =>
                 {
                     b.Navigation("HREmployees");
                 });
 
-            modelBuilder.Entity("Web.API.Models.Entities.HRFunctionalTitle", b =>
+            modelBuilder.Entity("Web.API.Entities.HRFunctionalTitle", b =>
                 {
                     b.Navigation("HREmployees");
                 });

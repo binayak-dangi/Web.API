@@ -10,55 +10,55 @@ namespace Web.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
-    public class HRBranchController : ControllerBase
+    //[Authorize]
+    public class HREmployeeController : ControllerBase
     {
-        private readonly ILogger<HRBranchController> _logger;
-        private readonly IHRBranchService _hrBranchService;
+        private readonly ILogger<HREmployeeController> _logger;
+        private readonly IHREmployeeService _hrEmployeeService;
 
-        public HRBranchController(ILogger<HRBranchController> logger,IHRBranchService hrBranchService)
+        public HREmployeeController(ILogger<HREmployeeController> logger,IHREmployeeService hrEmployeeService)
         {
             _logger = logger;
-            _hrBranchService = hrBranchService;
-        }
+            _hrEmployeeService = hrEmployeeService;
+        } 
 
-        [HttpGet(Name = "GetBranches")]
-        public async Task<IActionResult> GetBranches()
+        [HttpGet(Name = "GetEmployees")]
+        public async Task<IActionResult> GetEmployees()
         {
-            var branches = await _hrBranchService.GetAllBranchesAsync();
+            var employee = await _hrEmployeeService.GetAllEmployeesAsync();
 
-            return Ok(new ApiResponseModel<List<HRBranchDto>>
+            return Ok(new ApiResponseModel<List<HREmployeeDto>>
             {
                 Success = true,
-                Message = "Branches retrieved successfully.",
-                Data = branches
+                Message = "Employees retrieved successfully.",
+                Data = employee
             });
         }
 
-        [HttpGet("{id}", Name = "GetBranchById")]
-        public async Task<IActionResult> GetBranchById(long id)
+        [HttpGet("{id}", Name = "GetEmployeeById")]
+        public async Task<IActionResult> GetEmployeeById(long id)
         {
-            var branch = await _hrBranchService.GetBranchByIdAsync(id);
-            if (branch == null)
+            var employee = await _hrEmployeeService.GetEmployeeByIdAsync(id);
+            if (employee == null)
             {
                 return BadRequest(new ApiResponseModel<object>
                 {
                     Success = false,
-                    Message = $"Invalid Branch Id: {id}",
+                    Message = $"Invalid Employee Id: {id}",
                     Data = { }
                 });
             }
 
-            return Ok(new ApiResponseModel<HRBranchDto>
+            return Ok(new ApiResponseModel<HREmployeeDto>
             {
                 Success = true,
-                Message = $"Branch is retrieved by Id: {id}",
-                Data = branch
+                Message = $"Employee is retrieved by Id: {id}",
+                Data = employee
             });
         }
 
-        [HttpPost(Name = "CreateBranch")]
-        public async Task<IActionResult> CreateBranch([FromBody] HRBranchDto branchDto)
+        [HttpPost(Name = "CreateEmployee")]
+        public async Task<IActionResult> CreateEmployee([FromBody] HREmployeeDto employeeDto)
         {
             try
             {
@@ -74,18 +74,18 @@ namespace Web.API.Controllers
 
 
 
-                var branch = await _hrBranchService.CreateBranchAsync(branchDto);
+                var employee = await _hrEmployeeService.CreateEmployeeAsync(employeeDto);
 
-                return Ok(new ApiResponseModel<HRBranchDto>
+                return Ok(new ApiResponseModel<HREmployeeDto>
                 {
                     Success = true,
-                    Message = "Branch created successfully.",
-                    Data = branch
+                    Message = "Employee created successfully.",
+                    Data = employee
                 });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while creating branch.");
+                _logger.LogError(ex, "Error occurred while creating user.");
 
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     new ApiResponseModel<object>
@@ -97,8 +97,8 @@ namespace Web.API.Controllers
             }
         }
 
-        [HttpPut("{id}", Name = "EditBranch")]
-        public async Task<IActionResult> EditBranch(long id, [FromBody] HRBranchDto branchDto)
+        [HttpPut("{id}", Name = "EditEmployee")]
+        public async Task<IActionResult> EditEmployee(long id, [FromBody] HREmployeeDto employeeDto)
         {
             try
             {
@@ -112,30 +112,30 @@ namespace Web.API.Controllers
                     });
                 }
 
-                branchDto.Id = id;   // Set the ID from the route
+                employeeDto.Id = id;   // Set the ID from the route
 
-                var branch = await _hrBranchService.UpdateBranchAsync(branchDto);
+                var employee = await _hrEmployeeService.UpdateEmployeeAsync(employeeDto);
 
-                if (branch == null)
+                if (employee == null)
                 {
                     return NotFound(new ApiResponseModel<object>
                     {
                         Success = false,
-                        Message = $"Branch with ID {id} not found.",
+                        Message = $"Employee with ID {id} not found.",
                         Data = null
                     });
                 }
 
-                return Ok(new ApiResponseModel<HRBranchDto>
+                return Ok(new ApiResponseModel<HREmployeeDto>
                 {
                     Success = true,
-                    Message = $"Branch with ID {id} updated successfully.",
-                    Data = branch
+                    Message = $"Employee with ID {id} updated successfully.",
+                    Data = employee
                 });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error updating role.");
+                _logger.LogError(ex, "Error occurred while creating user.");
 
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     new ApiResponseModel<object>
@@ -147,8 +147,8 @@ namespace Web.API.Controllers
             }
         }
 
-        [HttpDelete("{id}", Name = "DeleteBranch")]
-        public async Task<IActionResult> DeleteBranch(long id)
+        [HttpDelete("{id}", Name = "DeleteEmployee")]
+        public async Task<IActionResult> DeleteEmployee(long id)
         {
             try
             {
@@ -157,33 +157,33 @@ namespace Web.API.Controllers
                     return BadRequest(new ApiResponseModel<object>
                     {
                         Success = false,
-                        Message = "Invalid Branch Id.",
+                        Message = "Invalid Employee Id.",
                         Data = null
                     });
                 }
 
-                var deletedBranch = await _hrBranchService.DeleteBranchAsync(id);
+                var deletedEmployee = await _hrEmployeeService.DeleteEmployeeAsync(id);
 
-                if (deletedBranch == null)
+                if (deletedEmployee == null)
                 {
                     return NotFound(new ApiResponseModel<object>
                     {
                         Success = false,
-                        Message = $"Branch with Id {id} not found.",
+                        Message = $"Employee with Id {id} not found.",
                         Data = null
                     });
                 }
 
-                return Ok(new ApiResponseModel<HRBranchDto>
+                return Ok(new ApiResponseModel<HREmployeeDto>
                 {
                     Success = true,
-                    Message = $"Branch with Id {id} deleted successfully.",
-                    Data = deletedBranch
+                    Message = $"Employee with Id {id} deleted successfully.",
+                    Data = deletedEmployee
                 });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while deleting branch with Id {BranchId}.", id);
+                _logger.LogError(ex, "Error occurred while deleting employee with Id {EmployeeId}.", id);
 
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     new ApiResponseModel<object>

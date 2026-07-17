@@ -8,7 +8,7 @@ namespace Web.API.DTOs
     public class HRCorporateTitleDto
     {
         [Key]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         [Required]
         [StringLength(200)]
@@ -33,28 +33,13 @@ namespace Web.API.DTOs
 
         public bool IsActive { get; set; }
 
-        [Column("Created_On")]
-        public DateTime CreatedOn { get; set; }
-
-        [Column("Updated_On")]
-        public DateTime UpdatedOn { get; set; }
-
+      
         [Column(TypeName = "decimal(9,2)")]
         public decimal? MaxAllowance { get; set; }
 
         [Required]
         [StringLength(5)]
         public string ShortName { get; set; } = string.Empty;
-
-        [Column("Created_By")]
-        [Required]
-        [StringLength(100)]
-        public string CreatedBy { get; set; } = string.Empty;
-
-        [Column("Updated_By")]
-        [Required]
-        [StringLength(100)]
-        public string UpdatedBy { get; set; } = string.Empty;
 
         [Required]
         [StringLength(16)]

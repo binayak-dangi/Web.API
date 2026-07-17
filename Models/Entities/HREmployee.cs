@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Web.API.Entities;
+using System.ComponentModel.DataAnnotations.Schema;
+using Web.API.Models.Entities;
 
 namespace MyTestMvc.Models.Setup;
 
@@ -54,11 +55,17 @@ public partial class HREmployee : CommonModel
     public long IdHRCompany { get; set; }
 
 
+    [ForeignKey(nameof(IdHRRole))]
     public virtual HRRole HRRole { get; set; } = null!;
 
+    [ForeignKey(nameof(IdHRBranch))]
     public virtual HRBranch HRBranch { get; set; } = null!;
 
-    public virtual ICollection<HREmployeePermissionLink> HREmployeePermissionLink { get; set; } = [];
+    [ForeignKey(nameof(IdHRCorporateTitle))]
     public virtual HRCorporateTitle HRCorporateTitle { get; set; } = null!;
+
+    [ForeignKey(nameof(IdHRFunctionalTitle))]
     public virtual HRFunctionalTitle HRFunctionalTitle { get; set; } = null!;
+    // Navigation Property
+    public virtual ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
 }

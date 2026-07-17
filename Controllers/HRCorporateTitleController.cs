@@ -11,54 +11,54 @@ namespace Web.API.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class HRBranchController : ControllerBase
+    public class HRCorporateTitleController : ControllerBase
     {
-        private readonly ILogger<HRBranchController> _logger;
-        private readonly IHRBranchService _hrBranchService;
+        private readonly ILogger<HRCorporateTitleController> _logger;
+        private readonly IHRCorporateTitleService _hrCorporateTitleService;
 
-        public HRBranchController(ILogger<HRBranchController> logger,IHRBranchService hrBranchService)
+        public HRCorporateTitleController(ILogger<HRCorporateTitleController> logger,IHRCorporateTitleService hrCorporateTitleService)
         {
             _logger = logger;
-            _hrBranchService = hrBranchService;
+            _hrCorporateTitleService = hrCorporateTitleService;
         }
 
-        [HttpGet(Name = "GetBranches")]
-        public async Task<IActionResult> GetBranches()
+        [HttpGet(Name = "GetCorporateTitles")]
+        public async Task<IActionResult> GetCorporateTitles()
         {
-            var branches = await _hrBranchService.GetAllBranchesAsync();
+            var corporateTitles = await _hrCorporateTitleService.GetAllCorporateTitlesAsync();
 
-            return Ok(new ApiResponseModel<List<HRBranchDto>>
+            return Ok(new ApiResponseModel<List<HRCorporateTitleDto>>
             {
                 Success = true,
-                Message = "Branches retrieved successfully.",
-                Data = branches
+                Message = "Corporate titles retrieved successfully.",
+                Data = corporateTitles
             });
         }
 
-        [HttpGet("{id}", Name = "GetBranchById")]
-        public async Task<IActionResult> GetBranchById(long id)
+        [HttpGet("{id}", Name = "GetCorporateTitleById")]
+        public async Task<IActionResult> GetCorporateTitleById(long id)
         {
-            var branch = await _hrBranchService.GetBranchByIdAsync(id);
-            if (branch == null)
+            var corporateTitle = await _hrCorporateTitleService.GetCorporateTitleByIdAsync(id);
+            if (corporateTitle == null)
             {
                 return BadRequest(new ApiResponseModel<object>
                 {
                     Success = false,
-                    Message = $"Invalid Branch Id: {id}",
+                    Message = $"Invalid Corporate Title Id: {id}",
                     Data = { }
                 });
             }
 
-            return Ok(new ApiResponseModel<HRBranchDto>
+            return Ok(new ApiResponseModel<HRCorporateTitleDto>
             {
                 Success = true,
-                Message = $"Branch is retrieved by Id: {id}",
-                Data = branch
+                Message = $"Corporate Title is retrieved by Id: {id}",
+                Data = corporateTitle
             });
         }
 
-        [HttpPost(Name = "CreateBranch")]
-        public async Task<IActionResult> CreateBranch([FromBody] HRBranchDto branchDto)
+        [HttpPost(Name = "CreateCorporateTitle")]
+        public async Task<IActionResult> CreateCorporateTitle([FromBody] HRCorporateTitleDto corporateTitleDto)
         {
             try
             {
@@ -72,15 +72,13 @@ namespace Web.API.Controllers
                     });
                 }
 
+                var corporateTitle = await _hrCorporateTitleService.CreateCorporateTitleAsync(corporateTitleDto);
 
-
-                var branch = await _hrBranchService.CreateBranchAsync(branchDto);
-
-                return Ok(new ApiResponseModel<HRBranchDto>
+                return Ok(new ApiResponseModel<HRCorporateTitleDto>
                 {
                     Success = true,
-                    Message = "Branch created successfully.",
-                    Data = branch
+                    Message = "Corporate title created successfully.",
+                    Data = corporateTitle
                 });
             }
             catch (Exception ex)
@@ -97,8 +95,8 @@ namespace Web.API.Controllers
             }
         }
 
-        [HttpPut("{id}", Name = "EditBranch")]
-        public async Task<IActionResult> EditBranch(long id, [FromBody] HRBranchDto branchDto)
+        [HttpPut("{id}", Name = "EditCorporateTitle")]
+        public async Task<IActionResult> EditCorporateTitle(long id, [FromBody] HRCorporateTitleDto corporateTitleDto)
         {
             try
             {
@@ -112,30 +110,30 @@ namespace Web.API.Controllers
                     });
                 }
 
-                branchDto.Id = id;   // Set the ID from the route
+                corporateTitleDto.Id = id;   // Set the ID from the route
 
-                var branch = await _hrBranchService.UpdateBranchAsync(branchDto);
+                var corporateTitle = await _hrCorporateTitleService.UpdateCorporateTitleAsync(corporateTitleDto);
 
-                if (branch == null)
+                if (corporateTitle == null)
                 {
                     return NotFound(new ApiResponseModel<object>
                     {
                         Success = false,
-                        Message = $"Branch with ID {id} not found.",
+                        Message = $"Corporate Title with ID {id} not found.",
                         Data = null
                     });
                 }
 
-                return Ok(new ApiResponseModel<HRBranchDto>
+                return Ok(new ApiResponseModel<HRCorporateTitleDto>
                 {
                     Success = true,
-                    Message = $"Branch with ID {id} updated successfully.",
-                    Data = branch
+                    Message = $"Corporate Title with ID {id} updated successfully.",
+                    Data = corporateTitle
                 });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error updating role.");
+                _logger.LogError(ex, "Error updating corporate title.");
 
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     new ApiResponseModel<object>
@@ -147,8 +145,8 @@ namespace Web.API.Controllers
             }
         }
 
-        [HttpDelete("{id}", Name = "DeleteBranch")]
-        public async Task<IActionResult> DeleteBranch(long id)
+        [HttpDelete("{id}", Name = "DeleteCorporateTitle")]
+        public async Task<IActionResult> DeleteCorporateTitle(long id)
         {
             try
             {
@@ -157,33 +155,33 @@ namespace Web.API.Controllers
                     return BadRequest(new ApiResponseModel<object>
                     {
                         Success = false,
-                        Message = "Invalid Branch Id.",
+                        Message = "Invalid Corporate Title Id.",
                         Data = null
                     });
                 }
 
-                var deletedBranch = await _hrBranchService.DeleteBranchAsync(id);
+                var deletedCorporateTitle = await _hrCorporateTitleService.DeleteCorporateTitleAsync(id);
 
-                if (deletedBranch == null)
+                if (deletedCorporateTitle == null)
                 {
                     return NotFound(new ApiResponseModel<object>
                     {
                         Success = false,
-                        Message = $"Branch with Id {id} not found.",
+                        Message = $"Corporate Title with Id {id} not found.",
                         Data = null
                     });
                 }
 
-                return Ok(new ApiResponseModel<HRBranchDto>
+                return Ok(new ApiResponseModel<HRCorporateTitleDto>
                 {
                     Success = true,
-                    Message = $"Branch with Id {id} deleted successfully.",
-                    Data = deletedBranch
+                    Message = $"Corporate Title with Id {id} deleted successfully.",
+                    Data = deletedCorporateTitle
                 });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while deleting branch with Id {BranchId}.", id);
+                _logger.LogError(ex, "Error occurred while deleting corporate title with Id {CorporateTitleId}.", id);
 
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     new ApiResponseModel<object>

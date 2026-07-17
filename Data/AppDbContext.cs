@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyTestMvc.Models.Setup;
-using Web.API.Entities;
+using Web.API.Models.Entities;
 
 namespace Web.API.Data
 {
@@ -12,6 +12,7 @@ namespace Web.API.Data
         }
 
         public DbSet<HREmployee> HREmployee { get; set; }
+        public DbSet<HRCompany> HRCompany { get; set; }
         public DbSet<HRBranch> HRBranch { get; set; }
         public DbSet<HRRole> HRRole { get; set; }
         public DbSet<HRRolePermissionLink> HRRolePermissionLink { get; set; }
@@ -19,5 +20,7 @@ namespace Web.API.Data
         public DbSet<HRPermission> HRPermission { get; set; }
         public DbSet<HRCorporateTitle> HRCorporateTitle { get; set; }
         public DbSet<HRFunctionalTitle> HRFunctionalTitle { get; set; }
+        public DbSet<RefreshToken> RefreshToken { get; set; }
     }
+
 }

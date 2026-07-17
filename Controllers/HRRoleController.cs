@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Web.API.DTOs;
 using Web.API.Models;
 using Web.API.Models.Common;
@@ -8,14 +9,13 @@ namespace Web.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class HRRoleController : ControllerBase
     {
         private readonly ILogger<HRRoleController> _logger;
         private readonly IHRRoleService _hrRoleService;
 
-        public HRRoleController(
-            ILogger<HRRoleController> logger,
-            IHRRoleService hrRoleService)
+        public HRRoleController(ILogger<HRRoleController> logger,IHRRoleService hrRoleService)
         {
             _logger = logger;
             _hrRoleService = hrRoleService;
@@ -90,8 +90,8 @@ namespace Web.API.Controllers
                     new ApiResponseModel<object>
                     {
                         Success = false,
-                        Message = ex.Message,
-                        Data = null
+                        Message = ex.InnerException?.Message ?? ex.Message,
+                        Data = null 
                     });
             }
         }
@@ -140,7 +140,7 @@ namespace Web.API.Controllers
                     new ApiResponseModel<object>
                     {
                         Success = false,
-                        Message = "An unexpected error occurred.",
+                        Message = ex.InnerException?.Message ?? ex.Message,
                         Data = null
                     });
             }
@@ -188,7 +188,7 @@ namespace Web.API.Controllers
                     new ApiResponseModel<object>
                     {
                         Success = false,
-                        Message = "An unexpected error occurred while deleting the role.",
+                        Message = ex.InnerException?.Message ?? ex.Message,
                         Data = null
                     });
             }
