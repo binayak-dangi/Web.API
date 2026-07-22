@@ -46,7 +46,7 @@ namespace Web.API.Services.Implementation
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(
+                expires: DateTime.Now.AddMinutes(
                     Convert.ToDouble(_configuration["Jwt:AccessTokenExpirationMinutes"])),
                 signingCredentials: credentials);
 

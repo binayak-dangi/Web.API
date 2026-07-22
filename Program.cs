@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using System.Text.Json;
 using Web.API.Data;
 using Web.API.Services.Implementation;
 using Web.API.Services.Interface;
@@ -11,7 +13,14 @@ using Web.API.Services.Interface;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(new AuthorizeFilter());
+})
+.AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+});
 builder.Services.AddScoped<IHRRoleService, HRRoleService>();
 builder.Services.AddScoped<IHRBranchService, HRBranchService>();
 builder.Services.AddScoped<IHRCompanyService, HRCompanyService>();
@@ -24,13 +33,6 @@ builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IHRPermissionService, HRPermissionService>();
 //Add Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-// Add DbContext
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")));
-// Add AutoMapper
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 //Add Authorize in swagger
 builder.Services.AddSwaggerGen(options =>
 {
@@ -65,6 +67,13 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
+// Add DbContext
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
+// Add AutoMapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 // JWT Authentication
 builder.Services.AddAuthentication(options =>
 {
@@ -95,18 +104,21 @@ builder.Services.AddAuthentication(options =>
 
     options.Events = new JwtBearerEvents
     {
-        OnChallenge = context =>
+        OnChallenge = async context =>
         {
             context.HandleResponse();
 
-            return context.Response.WriteAsJsonAsync(new
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+
+            await context.Response.WriteAsJsonAsync(new
             {
-                statusCode = 401,
+                success = false,
                 message = "Unauthorized access."
             });
         }
     };
 });
+
 
 builder.Services.AddAuthorization();
 //cros origin
@@ -119,7 +131,6 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

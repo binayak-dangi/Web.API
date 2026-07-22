@@ -1,4 +1,5 @@
-﻿using Web.API.Models.DTOS;
+﻿using AutoMapper;
+using Web.API.Models.DTOS;
 using Web.API.Services.Interface;
 
 namespace Web.API.Services.Implementation
@@ -8,12 +9,14 @@ namespace Web.API.Services.Implementation
         private readonly IHREmployeeService _employeeService;
         private readonly IJwtService _jwtService;
         private readonly IRefreshTokenService _refreshTokenService;
+        private readonly IMapper _mapper;
 
-        public AuthService(IHREmployeeService employeeService,IJwtService jwtService,IRefreshTokenService refreshTokenService)
+        public AuthService(IHREmployeeService employeeService,IJwtService jwtService,IRefreshTokenService refreshTokenService,IMapper mapper)
         {
             _employeeService = employeeService;
             _jwtService = jwtService;
             _refreshTokenService = refreshTokenService;
+            _mapper = mapper;
         }
 
         public async Task<LoginResponseDto?> LoginAsync(LoginRequestDto request)
@@ -31,20 +34,16 @@ namespace Web.API.Services.Implementation
                 AccessToken = accessToken,
                 RefreshToken = refreshToken.Token,
                 ExpiresAt = refreshToken.Expires,
-                Employee = new HREmployeeDto
-                {
-                    Id = employee.Id,
-                    Username = employee.Username,
-                    Email = employee.Email ?? string.Empty
-                }
+                Employee = _mapper.Map<HREmployeeDto>(employee)
             };
         }
 
         public async Task<LoginResponseDto?> RefreshToken(string refreshToken)
         {
-            var token = await _refreshTokenService.GetToken(refreshToken);
+           
+           var token = await _refreshTokenService.GetToken(refreshToken);
 
-            if (token == null || token.IsRevoked || token.Expires <= DateTime.UtcNow)
+            if (token == null || token.IsRevoked || token.Expires <= DateTime.Now)
                 return null;
 
             var accessToken = _jwtService.GenerateAccessToken(token.Employee);
@@ -55,12 +54,7 @@ namespace Web.API.Services.Implementation
                 AccessToken = accessToken,
                 RefreshToken = newRefreshToken.Token,
                 ExpiresAt = newRefreshToken.Expires,
-                Employee = new HREmployeeDto
-                {
-                    Id = token.Employee.Id,
-                    Username = token.Employee.Username,
-                    Email = token.Employee.Email ?? string.Empty
-                }
+                Employee = _mapper.Map<HREmployeeDto>(token.Employee)
             };
         }
 

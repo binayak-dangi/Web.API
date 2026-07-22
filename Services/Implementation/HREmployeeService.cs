@@ -43,13 +43,29 @@ namespace Web.API.Services.Implementation
             if (employee == null)
                 return null;
 
-            // If you are storing plain passwords (not recommended)
-            if (employee.PasswordHash != password)
-                return null;
+            if (string.IsNullOrEmpty(employee.PasswordHash))
+                return null; // No password stored
 
-            // If you use BCrypt:
-            //if (!BCrypt.Net.BCrypt.Verify(password, employee.PasswordHash))
-            //    return null;
+            bool passwordValid;
+
+            // Check BCrypt hash
+            if (employee.PasswordHash.StartsWith("$2a$") ||
+                employee.PasswordHash.StartsWith("$2b$") ||
+                employee.PasswordHash.StartsWith("$2y$"))
+            {
+                passwordValid = BCrypt.Net.BCrypt.Verify(
+                    password,
+                    employee.PasswordHash
+                );
+            }
+            else
+            {
+                // Legacy plain text password
+                passwordValid = employee.PasswordHash == password;
+            }
+
+            if (!passwordValid)
+                return null;
 
             return employee;
         }

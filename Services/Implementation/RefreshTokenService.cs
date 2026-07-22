@@ -22,13 +22,13 @@ namespace Web.API.Services.Implementation
             var activeTokens = await _context.RefreshToken
                 .Where(x => x.IDHREmployee == idEmployee &&
                             !x.IsRevoked &&
-                            x.Expires > DateTime.UtcNow)
+                            x.Expires > DateTime.Now)
                 .ToListAsync();
 
             foreach (var token in activeTokens)
             {
                 token.IsRevoked = true;
-                token.Revoked = DateTime.UtcNow;
+                token.Revoked = DateTime.Now;
             }
 
             // Create a new refresh token
@@ -36,8 +36,8 @@ namespace Web.API.Services.Implementation
             {
                 IDHREmployee = idEmployee,
                 Token = _jwtService.GenerateRefreshToken(),
-                Created = DateTime.UtcNow,
-                Expires = DateTime.UtcNow.AddDays(1),
+                Created = DateTime.Now,
+                Expires = DateTime.Now.AddDays(1),
                 IsRevoked = false
             };
 
@@ -67,7 +67,7 @@ namespace Web.API.Services.Implementation
                 return false;
 
             refreshToken.IsRevoked = true;
-            refreshToken.Revoked = DateTime.UtcNow;
+            refreshToken.Revoked = DateTime.Now;
 
             await _context.SaveChangesAsync();
 
@@ -82,14 +82,14 @@ namespace Web.API.Services.Implementation
                 throw new Exception("Invalid refresh token.");
 
             refreshToken.IsRevoked = true;
-            refreshToken.Revoked = DateTime.UtcNow;
+            refreshToken.Revoked = DateTime.Now;
 
             var newRefreshToken = new RefreshToken
             {
                 IDHREmployee = refreshToken.IDHREmployee,
                 Token = _jwtService.GenerateRefreshToken(),
-                Created = DateTime.UtcNow,
-                Expires = DateTime.UtcNow.AddDays(7),
+                Created = DateTime.Now,
+                Expires = refreshToken.Expires,
                 IsRevoked = false
             };
 

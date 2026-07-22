@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using MyTestMvc.Models.Setup;
 using Web.API.Data;
 using Web.API.DTOs;
@@ -15,18 +16,46 @@ namespace Web.API.Services.Implementation
         }
 
         public Task<List<HRRoleDto>> GetAllRolesAsync()
-            => GetAllAsync();
+        {
+            return GetAllAsync();
+        }
+
 
         public Task<HRRoleDto?> GetRoleByIdAsync(long id)
-            => GetByIdAsync(id);
+        {
+            return GetByIdAsync(id);
+        }
+            
 
-        public Task<HRRoleDto> CreateRoleAsync(HRRoleDto dto)
-            => CreateAsync(dto);
+        public async Task<HRRoleDto> CreateRoleAsync(HRRoleDto dto)
+        {
+            bool exists = await _context.HRRole
+                .AnyAsync(x => x.RoleName.Trim().ToLower() == dto.RoleName.Trim().ToLower()
+                               && !x.IsDeleted);
 
-        public Task<HRRoleDto?> UpdateRoleAsync(HRRoleDto dto)
-            => UpdateAsync(dto);
+            if (exists)
+                throw new Exception("Role name already exists.");
+
+            return await CreateAsync(dto);
+        }
+
+        public async Task<HRRoleDto?> UpdateRoleAsync(HRRoleDto dto)
+        {
+            bool exists = await _context.HRRole
+                .AnyAsync(x => x.Id != dto.Id
+                               && x.RoleName.Trim().ToLower() == dto.RoleName.Trim().ToLower()
+                               && !x.IsDeleted);
+
+            if (exists)
+                throw new Exception("Role name already exists.");
+
+            return await UpdateAsync(dto);
+        }
 
         public Task<HRRoleDto> DeleteRoleAsync(long id)
-            => SoftDeleteAsync(id);
+        {
+           return SoftDeleteAsync(id);
+        }
+           
     }
 }
