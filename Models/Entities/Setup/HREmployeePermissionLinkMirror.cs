@@ -4,11 +4,11 @@ public class HREmployeePermissionLinkMirror
 {
     public long Id { get; set; }
 
-    public long IDHREmployee { get; set; }
+    public long IdHREmployee { get; set; }
     public long IdHRCompany { get; set; }
 
 
-    public long IDHRPermission { get; set; }
+    public long IdHRPermission { get; set; }
 
     public bool CreateOnly { get; set; }
 

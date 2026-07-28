@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Web.API.Data;
 
@@ -11,9 +12,11 @@ using Web.API.Data;
 namespace Web.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260728103403_chnagesInDataModel")]
+    partial class chnagesInDataModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,95 @@ namespace Web.API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Web.API.Models.DTOS.Setup.HRPermissionEmployeeRoleDto", b =>
+                {
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Area")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AreaIcon")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("ChildOrder")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ClientIp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Controller")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("CreateOnly")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Created_By")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Created_On")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("DeleteOnly")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EditOnly")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FontIcon")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid>("IdGuid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<long>("IdHRCompany")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("IdHREmployee")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("IdHRPermission")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("IdHRRole")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("IdParentPermission")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<long?>("ParentOrder")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("PermissionCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ReadOnly")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Updated_By")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Updated_On")
+                        .HasColumnType("datetime2");
+
+                    b.ToTable("HRPermissionEmployeeRoleDto");
+                });
 
             modelBuilder.Entity("Web.API.Models.Entities.Setup.HRBranch", b =>
                 {
@@ -370,13 +462,13 @@ namespace Web.API.Migrations
                     b.Property<bool>("EditOnly")
                         .HasColumnType("bit");
 
+                    b.Property<long>("IDHREmployee")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("IDHRPermission")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("IdHRCompany")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("IdHREmployee")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("IdHRPermission")
                         .HasColumnType("bigint");
 
                     b.Property<bool>("ReadOnly")

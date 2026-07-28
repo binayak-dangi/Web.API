@@ -8,6 +8,8 @@ namespace Web.API.Services.Interface.Setup
     {
         Task<List<HRPermissionEmployeeRoleDto>> GetPermissionsLst(string paramFor, string paramType, long idReference);
         Task CreateRolePermisionLinkAsync(List<HRRolePermissionLinkMirror> entity);
+        Task CreateEmployeePermissionLinkAsync(List<HREmployeePermissionLinkMirror> entity);
+
 
     }
 }

@@ -155,7 +155,7 @@ namespace Web.API.Controllers.Setup
             });
         }
 
-        [HttpPut("bulkedit/{id}", Name = "BulkEditPermissionByRole")]
+        [HttpPut("role/bulkedit/{id}", Name = "BulkEditPermissionByRole")]
         public async Task<IActionResult> BulkEditPermissionByRole(long id, [FromBody] List<HRRolePermissionLinkMirror> permissionDtos)
         {
             try
@@ -194,6 +194,114 @@ namespace Web.API.Controllers.Setup
                 await _hrPermissionService.CreateRolePermisionLinkAsync(rolePermissionLinks);
 
                 var result = await _hrPermissionService.GetPermissionsLst("HRPermissionByRole", "BulkUpdatePermissionList", id);
+
+                return Ok(new ApiResponseModel<object>
+                {
+                    Success = true,
+                    Message = "Permissions updated successfully.",
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating permissions for role {RoleId}.", id);
+
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        Message = "An error occurred while updating permissions.",
+                        Data = null
+                    });
+            }
+        }
+        #endregion
+
+        #region PermissionByEmployee
+
+        [HttpGet("employee/{id}/assigned", Name = "GetAssignedPermissionsByEmployee")]
+        public async Task<IActionResult> GetAssignedPermissionsByEmployee(long? id)
+        {
+            if (!id.HasValue)
+            {
+                return BadRequest(new ApiResponseModel<object>
+                {
+                    Success = false,
+                    Message = "Role Id is required."
+                });
+            }
+
+            var permissions = await _hrPermissionService.GetPermissionsLst("HRPermissionByRole", "GetAssignedPermissionList", id.Value);
+
+            return Ok(new ApiResponseModel<List<HRPermissionEmployeeRoleDto>>
+            {
+                Success = true,
+                Message = "Assigned permissions retrieved successfully.",
+                Data = permissions
+            });
+        }
+
+        [HttpGet("employee/{id}/all", Name = "GetAllPermissionsByEmployee")]
+        public async Task<IActionResult> GetAllPermissionsByEmployee(long? id)
+        {
+            if (!id.HasValue)
+            {
+                return BadRequest(new ApiResponseModel<object>
+                {
+                    Success = false,
+                    Message = "Role Id is required."
+                });
+            }
+
+            var permissions = await _hrPermissionService.GetPermissionsLst("HRPermissionByRole", "GetAllPermissionList", id.Value);
+
+            return Ok(new ApiResponseModel<List<HRPermissionEmployeeRoleDto>>
+            {
+                Success = true,
+                Message = "All permissions retrieved successfully.",
+                Data = permissions
+            });
+        }
+
+        [HttpPut("employee/bulkedit/{id}", Name = "BulkEditPermissionByEmployee")]
+        public async Task<IActionResult> BulkEditPermissionByEmployee(long id, [FromBody] List<HRRolePermissionLinkMirror> permissionDtos)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        Message = "Invalid request.",
+                        Data = null
+                    });
+                }
+
+                if (permissionDtos == null || !permissionDtos.Any())
+                {
+                    return BadRequest(new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        Message = "Permission list cannot be empty.",
+                        Data = null
+                    });
+                }
+
+                var employeePermissionLinks = permissionDtos.Select(item => new HREmployeePermissionLinkMirror
+                {
+                    IdHRPermission = item.IdHRPermission,
+                    CreateOnly = item.CreateOnly,
+                    EditOnly = item.EditOnly,
+                    DeleteOnly = item.DeleteOnly,
+                    ReadOnly = item.ReadOnly,
+                    IdHRCompany = item.IdHRCompany,
+                    IdHREmployee = id
+                }).ToList();
+
+                await _hrPermissionService.CreateEmployeePermissionLinkAsync(employeePermissionLinks);
+
+                var result = await _hrPermissionService.GetPermissionsLst("HRPermissionByEmployee", "BulkUpdatePermissionList", id);
 
                 return Ok(new ApiResponseModel<object>
                 {

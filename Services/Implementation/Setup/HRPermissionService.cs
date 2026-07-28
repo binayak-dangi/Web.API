@@ -16,23 +16,28 @@ namespace Web.API.Services.Implementation.Setup
         }
 
 
-        public async Task<List<HRPermissionEmployeeRoleDto>> GetPermissionsLst(string paramFor,string paramType, long idReference)
+        public async Task<List<HRPermissionEmployeeRoleDto>> GetPermissionsLst(string paramFor,string paramType,long idReference)
         {
-            var permissions = await _context.HRPermissionEmployeeRoleDto
-                .FromSqlInterpolated($@"EXEC sp_Get_Permission
+            var permissions = await _context.Database.SqlQuery<HRPermissionEmployeeRoleDto>($@"EXEC sp_Get_Permission
                 @paramFor = {paramFor},
                 @paramType = {paramType},
                 @paramIdReference = {idReference}")
-                .AsNoTracking()
                 .ToListAsync();
 
-            return _mapper.Map<List<HRPermissionEmployeeRoleDto>>(permissions);
+            return permissions;
         }
 
         public async Task CreateRolePermisionLinkAsync(List<HRRolePermissionLinkMirror> entity)
         {
             await GetPermissionsLst("HRPermissionByRole", "UpdateMirrorTable", 0);
             await _context.HRRolePermissionLinkMirror.AddRangeAsync(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task CreateEmployeePermissionLinkAsync(List<HREmployeePermissionLinkMirror> entity)
+        {
+            await GetPermissionsLst("HRPermissionByEmployee", "UpdateMirrorTable", 0);
+            await _context.HREmployeePermissionLinkMirror.AddRangeAsync(entity);
             await _context.SaveChangesAsync();
         }
 
