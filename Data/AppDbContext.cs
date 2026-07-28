@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MyTestMvc.Models.Setup;
-using Web.API.Models.Entities;
+using Web.API.Models.DTOS.Setup;
+using Web.API.Models.Entities.Setup;
 
 namespace Web.API.Data
 {
@@ -16,11 +16,21 @@ namespace Web.API.Data
         public DbSet<HRBranch> HRBranch { get; set; }
         public DbSet<HRRole> HRRole { get; set; }
         public DbSet<HRRolePermissionLink> HRRolePermissionLink { get; set; }
+        public DbSet<HRRolePermissionLinkMirror> HRRolePermissionLinkMirror { get; set; }
         public DbSet<HREmployeePermissionLink> HREmployeePermissionLink { get; set; }
+        public DbSet<HREmployeePermissionLinkMirror> HREmployeePermissionLinkMirror { get; set; }
         public DbSet<HRPermission> HRPermission { get; set; }
         public DbSet<HRCorporateTitle> HRCorporateTitle { get; set; }
         public DbSet<HRFunctionalTitle> HRFunctionalTitle { get; set; }
         public DbSet<RefreshToken> RefreshToken { get; set; }
+        public DbSet<HRPermissionEmployeeRoleDto> HRPermissionEmployeeRoleDto { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<HRPermissionEmployeeRoleDto>().HasNoKey();
+        }
     }
 
 }

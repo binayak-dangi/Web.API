@@ -5,7 +5,7 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MyTestMvc.Models
+namespace Web.API.Models
 {
     public class ExceptionModel
     {

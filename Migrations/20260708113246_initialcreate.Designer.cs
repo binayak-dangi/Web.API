@@ -25,7 +25,7 @@ namespace Web.API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HRBranch", b =>
+            modelBuilder.Entity("Web.API.Models.Setup.HRBranch", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -72,7 +72,7 @@ namespace Web.API.Migrations
                     b.ToTable("HRBranche");
                 });
 
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HREmployee", b =>
+            modelBuilder.Entity("Web.API.Models.Setup.HREmployee", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -185,7 +185,7 @@ namespace Web.API.Migrations
                     b.ToTable("HREmployee");
                 });
 
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HREmployeePermissionLink", b =>
+            modelBuilder.Entity("Web.API.Models.Setup.HREmployeePermissionLink", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -235,7 +235,7 @@ namespace Web.API.Migrations
                     b.ToTable("HREmployeePermissionLink");
                 });
 
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HRPermission", b =>
+            modelBuilder.Entity("Web.API.Models.Setup.HRPermission", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -306,7 +306,7 @@ namespace Web.API.Migrations
                     b.ToTable("HRPermission");
                 });
 
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HRRole", b =>
+            modelBuilder.Entity("Web.API.Models.Setup.HRRole", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -346,7 +346,7 @@ namespace Web.API.Migrations
                     b.ToTable("HRRole");
                 });
 
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HRRolePermissionLink", b =>
+            modelBuilder.Entity("Web.API.Models.Setup.HRRolePermissionLink", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -407,15 +407,15 @@ namespace Web.API.Migrations
                     b.ToTable("HRRolePermissionLink");
                 });
 
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HREmployee", b =>
+            modelBuilder.Entity("Web.API.Models.Setup.HREmployee", b =>
                 {
-                    b.HasOne("MyTestMvc.Models.Setup.HRBranch", "HRBranch")
+                    b.HasOne("Web.API.Models.Setup.HRBranch", "HRBranch")
                         .WithMany("HREmployees")
                         .HasForeignKey("HRBranchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyTestMvc.Models.Setup.HRRole", "HRRole")
+                    b.HasOne("Web.API.Models.Setup.HRRole", "HRRole")
                         .WithMany("HREmployees")
                         .HasForeignKey("HRRoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -426,21 +426,21 @@ namespace Web.API.Migrations
                     b.Navigation("HRRole");
                 });
 
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HREmployeePermissionLink", b =>
+            modelBuilder.Entity("Web.API.Models.Setup.HREmployeePermissionLink", b =>
                 {
-                    b.HasOne("MyTestMvc.Models.Setup.HREmployee", "HREmployee")
+                    b.HasOne("Web.API.Models.Setup.HREmployee", "HREmployee")
                         .WithMany("HREmployeePermissionLink")
                         .HasForeignKey("HREmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyTestMvc.Models.Setup.HRPermission", "HRPermission")
+                    b.HasOne("Web.API.Models.Setup.HRPermission", "HRPermission")
                         .WithMany()
                         .HasForeignKey("HRPermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyTestMvc.Models.Setup.HRRolePermissionLink", null)
+                    b.HasOne("Web.API.Models.Setup.HRRolePermissionLink", null)
                         .WithMany("HREmployeePermissionLinks")
                         .HasForeignKey("HRRolePermissionLinkId");
 
@@ -449,15 +449,15 @@ namespace Web.API.Migrations
                     b.Navigation("HRPermission");
                 });
 
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HRRolePermissionLink", b =>
+            modelBuilder.Entity("Web.API.Models.Setup.HRRolePermissionLink", b =>
                 {
-                    b.HasOne("MyTestMvc.Models.Setup.HRPermission", "HRPermission")
+                    b.HasOne("Web.API.Models.Setup.HRPermission", "HRPermission")
                         .WithMany("HRRolePermissionLinks")
                         .HasForeignKey("HRPermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyTestMvc.Models.Setup.HRRole", "HRRole")
+                    b.HasOne("Web.API.Models.Setup.HRRole", "HRRole")
                         .WithMany("HRRolePermissionLinks")
                         .HasForeignKey("HRRoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -468,29 +468,29 @@ namespace Web.API.Migrations
                     b.Navigation("HRRole");
                 });
 
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HRBranch", b =>
+            modelBuilder.Entity("Web.API.Models.Setup.HRBranch", b =>
                 {
                     b.Navigation("HREmployees");
                 });
 
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HREmployee", b =>
+            modelBuilder.Entity("Web.API.Models.Setup.HREmployee", b =>
                 {
                     b.Navigation("HREmployeePermissionLink");
                 });
 
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HRPermission", b =>
+            modelBuilder.Entity("Web.API.Models.Setup.HRPermission", b =>
                 {
                     b.Navigation("HRRolePermissionLinks");
                 });
 
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HRRole", b =>
+            modelBuilder.Entity("Web.API.Models.Setup.HRRole", b =>
                 {
                     b.Navigation("HREmployees");
 
                     b.Navigation("HRRolePermissionLinks");
                 });
 
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HRRolePermissionLink", b =>
+            modelBuilder.Entity("Web.API.Models.Setup.HRRolePermissionLink", b =>
                 {
                     b.Navigation("HREmployeePermissionLinks");
                 });

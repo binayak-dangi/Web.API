@@ -1,5 +1,5 @@
 ﻿
-namespace MyTestMvc.Models.Common
+namespace Web.API.Models.Common
 {
     public class SearchFilterModel
     {

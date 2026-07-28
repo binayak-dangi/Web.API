@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using MyTestMvc.Models;
+using Web.API.Models;
 using Web.API.Data;
 using Web.API.Models.Common;
 using Web.API.Services.CommonService.Interface;
@@ -102,6 +102,23 @@ namespace Web.API.Services.CommonService.Implementation
             // deletedDto = _mapper.Map<TDto>(entity);
 
             return deletedDto;
+        }
+
+
+        // Soft Delete
+        public virtual async Task<TDto?> SoftDeleteAsyncs(long id)
+        {
+            var entity = await _dbSet
+                .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
+
+            if (entity == null)
+                return default;
+
+            entity.IsDeleted = true;
+
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<TDto>(entity);
         }
     }
 }

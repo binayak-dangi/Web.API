@@ -22,292 +22,12 @@ namespace Web.API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HRBranch", b =>
+            modelBuilder.Entity("Web.API.Models.DTOS.HRPermissionEmployeeRoleDto", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("BMEmailID")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BranchAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BranchName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Created_By")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Created_On")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("IdGUID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<long>("IdHRCompany")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("PhoneNo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Updated_By")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Updated_On")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("HRBranch");
-                });
-
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HRCompany", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("CompanyName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Created_By")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Created_On")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("IdGUID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("LoginAttempt")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Updated_By")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Updated_On")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("HRCompany");
-                });
-
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HREmployee", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Created_By")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Created_On")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateOnly?>("DOB")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Designation")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Gender")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("IdGUID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<long>("IdHRBranch")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("IdHRCompany")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("IdHRCorporateTitle")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("IdHRFunctionalTitle")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("IdHRRole")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("ImageGUID")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastLoginDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastPasswordAlterDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("LoginAttemptCount")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("MiddleName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("PasswordExpiryPeriod")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHistory")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordResetToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("PasswordResetTokenExpiry")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PermanentAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TemporaryAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Updated_By")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Updated_On")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdHRBranch");
-
-                    b.HasIndex("IdHRCorporateTitle");
-
-                    b.HasIndex("IdHRFunctionalTitle");
-
-                    b.HasIndex("IdHRRole");
-
-                    b.ToTable("HREmployee");
-                });
-
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HREmployeePermissionLink", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("ClientIP")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("CreateOnly")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("DeleteOnly")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("EditOnly")
-                        .HasColumnType("bit");
-
-                    b.Property<long>("HREmployeeId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("HRPermissionId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("HRRolePermissionLinkId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("IDHREmployee")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("IDHRPermission")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("IdHRCompany")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("ReadOnly")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HREmployeeId");
-
-                    b.HasIndex("HRPermissionId");
-
-                    b.HasIndex("HRRolePermissionLinkId");
-
-                    b.ToTable("HREmployeePermissionLink");
-                });
-
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HRPermission", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
                     b.Property<string>("Action")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Area")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AreaIcon")
@@ -316,147 +36,52 @@ namespace Web.API.Migrations
                     b.Property<long?>("ChildOrder")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("ClientIp")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Controller")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Created_By")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Created_On")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FontIcon")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("IdGUID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<long>("IdHRCompany")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("IdParentPermission")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<long>("ParentOrder")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("PermissionCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Updated_By")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Updated_On")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("HRPermission");
-                });
-
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HRRole", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Created_By")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Created_On")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("IdGUID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<long>("IdHRCompany")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("RoleName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Updated_By")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Updated_On")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("HRRole");
-                });
-
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HRRolePermissionLink", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("CreateOnly")
                         .HasColumnType("bit");
 
                     b.Property<string>("Created_By")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Created_On")
+                    b.Property<DateTime?>("Created_On")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("DeleteOnly")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("EditOnly")
                         .HasColumnType("bit");
 
-                    b.Property<long>("HRPermissionId")
+                    b.Property<string>("FontIcon")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Id")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("HRRoleId")
-                        .HasColumnType("bigint");
-
-                    b.Property<Guid>("IdGUID")
+                    b.Property<Guid>("IdGuid")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<long>("IdHRCompany")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("IdHRPermission")
+                    b.Property<long?>("IdHREmployee")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("IdHRRole")
+                    b.Property<long?>("IdHRPermission")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("IdHRRole")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("IdParentPermission")
                         .HasColumnType("bigint");
 
                     b.Property<bool>("IsActive")
@@ -465,23 +90,25 @@ namespace Web.API.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<long?>("ParentOrder")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("PermissionCode")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("ReadOnly")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Updated_By")
-                        .IsRequired()
+                    b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Updated_On")
+                    b.Property<string>("Updated_By")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Updated_On")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("HRPermissionId");
-
-                    b.HasIndex("HRRoleId");
-
-                    b.ToTable("HRRolePermissionLink");
+                    b.ToTable("HRPermissionEmployeeRoleDto");
                 });
 
             modelBuilder.Entity("Web.API.Models.Entities.HRCorporateTitle", b =>
@@ -646,9 +273,510 @@ namespace Web.API.Migrations
                     b.ToTable("RefreshToken");
                 });
 
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HREmployee", b =>
+            modelBuilder.Entity("Web.API.Models.Setup.HRBranch", b =>
                 {
-                    b.HasOne("MyTestMvc.Models.Setup.HRBranch", "HRBranch")
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("BMEmailID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BranchAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BranchName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Created_By")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created_On")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("IdGUID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<long>("IdHRCompany")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PhoneNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Updated_By")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Updated_On")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HRBranch");
+                });
+
+            modelBuilder.Entity("Web.API.Models.Setup.HRCompany", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Created_By")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created_On")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("IdGUID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LoginAttempt")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Updated_By")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Updated_On")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HRCompany");
+                });
+
+            modelBuilder.Entity("Web.API.Models.Setup.HREmployee", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Created_By")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created_On")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateOnly?>("DOB")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Designation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("IdGUID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<long>("IdHRBranch")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("IdHRCompany")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("IdHRCorporateTitle")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("IdHRFunctionalTitle")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("IdHRRole")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ImageGUID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastLoginDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastPasswordAlterDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LoginAttemptCount")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("PasswordExpiryPeriod")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHistory")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordResetToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("PasswordResetTokenExpiry")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PermanentAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TemporaryAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Updated_By")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Updated_On")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdHRBranch");
+
+                    b.HasIndex("IdHRCorporateTitle");
+
+                    b.HasIndex("IdHRFunctionalTitle");
+
+                    b.HasIndex("IdHRRole");
+
+                    b.ToTable("HREmployee");
+                });
+
+            modelBuilder.Entity("Web.API.Models.Setup.HREmployeePermissionLink", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("ClientIP")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("CreateOnly")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DeleteOnly")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("EditOnly")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("IdHRCompany")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("IdHREmployee")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("IdHRPermission")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("ReadOnly")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdHREmployee");
+
+                    b.HasIndex("IdHRPermission");
+
+                    b.ToTable("HREmployeePermissionLink");
+                });
+
+            modelBuilder.Entity("Web.API.Models.Setup.HREmployeePermissionLinkMirror", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<bool>("CreateOnly")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DeleteOnly")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("EditOnly")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("IDHREmployee")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("IDHRPermission")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("IdHRCompany")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("ReadOnly")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HREmployeePermissionLinkMirror");
+                });
+
+            modelBuilder.Entity("Web.API.Models.Setup.HRPermission", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Area")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AreaIcon")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("ChildOrder")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Controller")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Created_By")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created_On")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FontIcon")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("IdGUID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<long>("IdHRCompany")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("IdParentPermission")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("ParentOrder")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("PermissionCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Updated_By")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Updated_On")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HRPermission");
+                });
+
+            modelBuilder.Entity("Web.API.Models.Setup.HRRole", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Created_By")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created_On")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("IdGUID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<long>("IdHRCompany")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Updated_By")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Updated_On")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HRRole");
+                });
+
+            modelBuilder.Entity("Web.API.Models.Setup.HRRolePermissionLink", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<bool>("CreateOnly")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DeleteOnly")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("EditOnly")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("IdHRCompany")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("IdHRPermission")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("IdHRRole")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("ReadOnly")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdHRPermission");
+
+                    b.HasIndex("IdHRRole");
+
+                    b.ToTable("HRRolePermissionLink");
+                });
+
+            modelBuilder.Entity("Web.API.Models.Setup.HRRolePermissionLinkMirror", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<bool>("CreateOnly")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DeleteOnly")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("EditOnly")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("IdHRCompany")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("IdHRPermission")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("IdHRRole")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("ReadOnly")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HRRolePermissionLinkMirror");
+                });
+
+            modelBuilder.Entity("Web.API.Models.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("Web.API.Models.Setup.HREmployee", "Employee")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("IDHREmployee")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("Web.API.Models.Setup.HREmployee", b =>
+                {
+                    b.HasOne("Web.API.Models.Setup.HRBranch", "HRBranch")
                         .WithMany("HREmployees")
                         .HasForeignKey("IdHRBranch")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -666,7 +794,7 @@ namespace Web.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyTestMvc.Models.Setup.HRRole", "HRRole")
+                    b.HasOne("Web.API.Models.Setup.HRRole", "HRRole")
                         .WithMany("HREmployees")
                         .HasForeignKey("IdHRRole")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -681,84 +809,42 @@ namespace Web.API.Migrations
                     b.Navigation("HRRole");
                 });
 
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HREmployeePermissionLink", b =>
+            modelBuilder.Entity("Web.API.Models.Setup.HREmployeePermissionLink", b =>
                 {
-                    b.HasOne("MyTestMvc.Models.Setup.HREmployee", "HREmployee")
+                    b.HasOne("Web.API.Models.Setup.HREmployee", "HREmployee")
                         .WithMany()
-                        .HasForeignKey("HREmployeeId")
+                        .HasForeignKey("IdHREmployee")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyTestMvc.Models.Setup.HRPermission", "HRPermission")
+                    b.HasOne("Web.API.Models.Setup.HRPermission", "HRPermission")
                         .WithMany()
-                        .HasForeignKey("HRPermissionId")
+                        .HasForeignKey("IdHRPermission")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("MyTestMvc.Models.Setup.HRRolePermissionLink", null)
-                        .WithMany("HREmployeePermissionLinks")
-                        .HasForeignKey("HRRolePermissionLinkId");
 
                     b.Navigation("HREmployee");
 
                     b.Navigation("HRPermission");
                 });
 
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HRRolePermissionLink", b =>
+            modelBuilder.Entity("Web.API.Models.Setup.HRRolePermissionLink", b =>
                 {
-                    b.HasOne("MyTestMvc.Models.Setup.HRPermission", "HRPermission")
+                    b.HasOne("Web.API.Models.Setup.HRPermission", "HRPermission")
                         .WithMany("HRRolePermissionLinks")
-                        .HasForeignKey("HRPermissionId")
+                        .HasForeignKey("IdHRPermission")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyTestMvc.Models.Setup.HRRole", "HRRole")
+                    b.HasOne("Web.API.Models.Setup.HRRole", "HRRole")
                         .WithMany("HRRolePermissionLinks")
-                        .HasForeignKey("HRRoleId")
+                        .HasForeignKey("IdHRRole")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("HRPermission");
 
                     b.Navigation("HRRole");
-                });
-
-            modelBuilder.Entity("Web.API.Models.Entities.RefreshToken", b =>
-                {
-                    b.HasOne("MyTestMvc.Models.Setup.HREmployee", "Employee")
-                        .WithMany("RefreshTokens")
-                        .HasForeignKey("IDHREmployee")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
-                });
-
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HRBranch", b =>
-                {
-                    b.Navigation("HREmployees");
-                });
-
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HREmployee", b =>
-                {
-                    b.Navigation("RefreshTokens");
-                });
-
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HRPermission", b =>
-                {
-                    b.Navigation("HRRolePermissionLinks");
-                });
-
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HRRole", b =>
-                {
-                    b.Navigation("HREmployees");
-
-                    b.Navigation("HRRolePermissionLinks");
-                });
-
-            modelBuilder.Entity("MyTestMvc.Models.Setup.HRRolePermissionLink", b =>
-                {
-                    b.Navigation("HREmployeePermissionLinks");
                 });
 
             modelBuilder.Entity("Web.API.Models.Entities.HRCorporateTitle", b =>
@@ -769,6 +855,28 @@ namespace Web.API.Migrations
             modelBuilder.Entity("Web.API.Models.Entities.HRFunctionalTitle", b =>
                 {
                     b.Navigation("HREmployees");
+                });
+
+            modelBuilder.Entity("Web.API.Models.Setup.HRBranch", b =>
+                {
+                    b.Navigation("HREmployees");
+                });
+
+            modelBuilder.Entity("Web.API.Models.Setup.HREmployee", b =>
+                {
+                    b.Navigation("RefreshTokens");
+                });
+
+            modelBuilder.Entity("Web.API.Models.Setup.HRPermission", b =>
+                {
+                    b.Navigation("HRRolePermissionLinks");
+                });
+
+            modelBuilder.Entity("Web.API.Models.Setup.HRRole", b =>
+                {
+                    b.Navigation("HREmployees");
+
+                    b.Navigation("HRRolePermissionLinks");
                 });
 #pragma warning restore 612, 618
         }

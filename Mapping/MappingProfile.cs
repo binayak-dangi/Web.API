@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using MyTestMvc.Models.Setup;
-using Web.API.DTOs;
-using Web.API.Models.Entities;
-using Web.API.Models.DTOS;
+using Web.API.Models.DTOS.Setup;
+using Web.API.Models.Entities.Setup;
 
 namespace Web.API.Mapping
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace MyTestMvc.Models.Common
+namespace Web.API.Models.Common
 {
     public class PaginationModel
     {

@@ -6,6 +6,6 @@
         Task<TEntityDto?> GetByIdAsync(long id);
         Task<TEntityDto> CreateAsync(TEntityDto dto);
         Task<TEntityDto?> UpdateAsync(TEntityDto dto);
-        Task<bool> DeleteAsync(long id);
+        Task<TEntityDto?> SoftDeleteAsyncs(long id);
     }
 }

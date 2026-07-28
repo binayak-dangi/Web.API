@@ -7,8 +7,8 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using System.Text.Json;
 using Web.API.Data;
-using Web.API.Services.Implementation;
-using Web.API.Services.Interface;
+using Web.API.Services.Implementation.Setup;
+using Web.API.Services.Interface.Setup;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -128,7 +128,8 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("http://localhost:5173")
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 var app = builder.Build();
