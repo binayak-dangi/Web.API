@@ -16,6 +16,7 @@ namespace Web.API.Controllers.Setup
         private readonly ILogger<HREmployeeController> _logger;
         private readonly IHREmployeeService _hrEmployeeService;
 
+
         public HREmployeeController(ILogger<HREmployeeController> logger,IHREmployeeService hrEmployeeService)
         {
             _logger = logger;
@@ -71,8 +72,6 @@ namespace Web.API.Controllers.Setup
                         Data = null
                     });
                 }
-
-
 
                 var employee = await _hrEmployeeService.CreateAsync(employeeDto);
 
@@ -141,7 +140,7 @@ namespace Web.API.Controllers.Setup
                     new ApiResponseModel<object>
                     {
                         Success = false,
-                        Message = ex.InnerException?.Message ?? ex.Message,
+                        Message = ex.Message,
                         Data = null
                     });
             }

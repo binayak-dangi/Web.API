@@ -13,8 +13,6 @@
         public bool EditOnly { get; set; }
         public bool DeleteOnly { get; set; }
 
-        public string? ClientIp { get; set; }
-
         public long? IdParentPermission { get; set; }
 
         public string? Title { get; set; }

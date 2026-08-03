@@ -20,7 +20,6 @@ public class HREmployeePermissionLink
 
     public bool DeleteOnly { get; set; }
 
-    public string ClientIP { get; set; }
 
     // Navigation Properties
     [ForeignKey(nameof(IdHREmployee))]

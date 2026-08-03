@@ -47,7 +47,7 @@ namespace Web.API.Controllers.Setup
                 {
                     Success = false,
                     Message = $"Invalid Permission Id: {id}",
-                    Data = { }
+                    Data = null
                 });
             }
 
@@ -155,7 +155,7 @@ namespace Web.API.Controllers.Setup
             });
         }
 
-        [HttpPut("role/bulkedit/{id}", Name = "BulkEditPermissionByRole")]
+        [HttpPut("bulkedit/{id}", Name = "BulkEditPermissionByRole")]
         public async Task<IActionResult> BulkEditPermissionByRole(long id, [FromBody] List<HRRolePermissionLinkMirror> permissionDtos)
         {
             try
@@ -231,7 +231,7 @@ namespace Web.API.Controllers.Setup
                 });
             }
 
-            var permissions = await _hrPermissionService.GetPermissionsLst("HRPermissionByRole", "GetAssignedPermissionList", id.Value);
+            var permissions = await _hrPermissionService.GetPermissionsLst("HRPermissionByEmployee", "GetAssignedPermissionList", id.Value);
 
             return Ok(new ApiResponseModel<List<HRPermissionEmployeeRoleDto>>
             {
@@ -253,7 +253,7 @@ namespace Web.API.Controllers.Setup
                 });
             }
 
-            var permissions = await _hrPermissionService.GetPermissionsLst("HRPermissionByRole", "GetAllPermissionList", id.Value);
+            var permissions = await _hrPermissionService.GetPermissionsLst("HRPermissionByEmployee", "GetAllPermissionList", id.Value);
 
             return Ok(new ApiResponseModel<List<HRPermissionEmployeeRoleDto>>
             {
@@ -263,7 +263,7 @@ namespace Web.API.Controllers.Setup
             });
         }
 
-        [HttpPut("employee/bulkedit/{id}", Name = "BulkEditPermissionByEmployee")]
+        [HttpPut("bulkedit/employee/{id}", Name = "BulkEditPermissionByEmployee")]
         public async Task<IActionResult> BulkEditPermissionByEmployee(long id, [FromBody] List<HRRolePermissionLinkMirror> permissionDtos)
         {
             try
@@ -323,6 +323,31 @@ namespace Web.API.Controllers.Setup
                     });
             }
         }
+        #endregion
+
+        #region Menu
+        [HttpGet("menu/{id}", Name = "GetMenuPermissions")]
+        public async Task<IActionResult> GetMenuPermissions(long? id)
+        {
+            if (!id.HasValue)
+            {
+                return BadRequest(new ApiResponseModel<object>
+                {
+                    Success = false,
+                    Message = "Employee Id is required."
+                });
+            }
+
+            var permissions = await _hrPermissionService.GetPermissionsLst("GetPermissionMenuLst", "", id.Value);
+
+            return Ok(new ApiResponseModel<List<HRPermissionEmployeeRoleDto>>
+            {
+                Success = true,
+                Message = "All menus retrieved successfully.",
+                Data = permissions
+            });
+        }
+
         #endregion
 
     }

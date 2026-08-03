@@ -7,6 +7,7 @@ namespace Web.API.Services.Interface.Setup
 {
     public interface IHREmployeeService: IGenericService<HREmployeeDto>
     {
+        
         Task<HREmployee?> Authenticate(string username, string password);
     }
 }
