@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Web.API.Models.DTOS.Setup;
+using Web.API.Models.Entities.Setup;
 using Web.API.Services.Interface.Setup;
 
 namespace Web.API.Services.Implementation.Setup
@@ -9,14 +10,12 @@ namespace Web.API.Services.Implementation.Setup
         private readonly IHREmployeeService _employeeService;
         private readonly IJwtService _jwtService;
         private readonly IRefreshTokenService _refreshTokenService;
-        private readonly IMapper _mapper;
 
-        public AuthService(IHREmployeeService employeeService,IJwtService jwtService,IRefreshTokenService refreshTokenService,IMapper mapper)
+        public AuthService(IHREmployeeService employeeService,IJwtService jwtService,IRefreshTokenService refreshTokenService)
         {
             _employeeService = employeeService;
             _jwtService = jwtService;
             _refreshTokenService = refreshTokenService;
-            _mapper = mapper;
         }
 
         public async Task<LoginResponseDto?> LoginAsync(LoginRequestDto request)
@@ -34,7 +33,19 @@ namespace Web.API.Services.Implementation.Setup
                 AccessToken = accessToken,
                 RefreshToken = refreshToken.Token,
                 ExpiresAt = refreshToken.Expires,
-                Employee = _mapper.Map<HREmployeeDto>(employee)
+                Employee =  new HREmployeeDto
+                {
+                    Id = employee.Id,
+                    FirstName = employee.FirstName,
+                    MiddleName = employee.MiddleName,
+                    LastName = employee.LastName,
+                    IdHRRole = employee.IdHRRole,
+                    IdHRBranch = employee.IdHRBranch,
+                    IdHRCompany = employee.IdHRCompany,
+                    Email=employee.Email,
+                    Username=employee.Username,
+                    
+                }
             };
         }
 
@@ -46,6 +57,7 @@ namespace Web.API.Services.Implementation.Setup
             if (token == null || token.IsRevoked || token.Expires <= DateTime.Now)
                 return null;
 
+            var employee = token.Employee;
             var accessToken = _jwtService.GenerateAccessToken(token.Employee);
             var newRefreshToken = await _refreshTokenService.RotateToken(refreshToken);
 
@@ -54,7 +66,16 @@ namespace Web.API.Services.Implementation.Setup
                 AccessToken = accessToken,
                 RefreshToken = newRefreshToken.Token,
                 ExpiresAt = newRefreshToken.Expires,
-                Employee = _mapper.Map<HREmployeeDto>(token.Employee)
+                Employee = new HREmployeeDto
+                {
+                    Id = employee.Id,
+                    FirstName = employee.FirstName,
+                    MiddleName = employee.MiddleName,
+                    LastName = employee.LastName,
+                    IdHRRole=employee.IdHRRole,
+                    IdHRBranch=employee.IdHRBranch,
+                    IdHRCompany=employee.IdHRCompany
+                }
             };
         }
 

@@ -14,7 +14,7 @@ namespace Web.API.Controllers.Setup
         private readonly ILogger<HRBranchController> _logger;
         private readonly IHRBranchService _hrBranchService;
 
-        public HRBranchController(ILogger<HRBranchController> logger,IHRBranchService hrBranchService)
+        public HRBranchController(ILogger<HRBranchController> logger, IHRBranchService hrBranchService)
         {
             _logger = logger;
             _hrBranchService = hrBranchService;
@@ -71,6 +71,14 @@ namespace Web.API.Controllers.Setup
                 }
 
 
+                if (await _hrBranchService.IsBranchExist(branchDto))
+                {
+                    return Conflict(new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        Message = "Branch name already exists."
+                    });
+                }
 
                 var branch = await _hrBranchService.CreateAsync(branchDto);
 
@@ -89,8 +97,7 @@ namespace Web.API.Controllers.Setup
                     new ApiResponseModel<object>
                     {
                         Success = false,
-                        Message = ex.InnerException?.Message ?? ex.Message,
-                        Data = null
+                        Message = ex.Message,
                     });
             }
         }
@@ -111,6 +118,16 @@ namespace Web.API.Controllers.Setup
                 }
 
                 branchDto.Id = id;   // Set the ID from the route
+
+
+                if (await _hrBranchService.IsBranchExist(branchDto))
+                {
+                    return Conflict(new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        Message = "Branch name already exists."
+                    });
+                }
 
                 var branch = await _hrBranchService.UpdateAsync(branchDto);
 

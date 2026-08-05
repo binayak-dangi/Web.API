@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Web.API.Data;
 using Web.API.Services.CommonService.Implementation;
 using Web.API.Models.Entities.Setup;
@@ -9,8 +10,8 @@ namespace Web.API.Services.Implementation.Setup
 {
     public class HRFunctionalTitleService : GenericService<HRFunctionalTitle, HRFunctionalTitleDto>, IHRFunctionalTitleService
     {
-        public HRFunctionalTitleService(AppDbContext context, IMapper mapper)
-            : base(context, mapper)
+        public HRFunctionalTitleService(AppDbContext context, IMapper mapper, IValidator<HRFunctionalTitleDto> validator)
+            : base(context, mapper, validator)
         {
         }
 

@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using Web.API.Models;
 using Web.API.Data;
+using Web.API.Models;
 using Web.API.Models.Common;
 using Web.API.Services.CommonService.Interface;
 
@@ -12,12 +13,27 @@ namespace Web.API.Services.CommonService.Implementation
         protected readonly AppDbContext _context;
         protected readonly IMapper _mapper;
         protected readonly DbSet<TEntity> _dbSet;
+        protected readonly IValidator<TDto> _validator;
 
-        public GenericService(AppDbContext context, IMapper mapper)
+
+        public GenericService(AppDbContext context, IMapper mapper, IValidator<TDto> validator)
         {
             _context = context;
             _mapper = mapper;
             _dbSet = _context.Set<TEntity>();
+            _validator = validator;
+        }
+
+        //Validation method to be called before Create or Update operations
+        protected virtual async Task ValidateAsync(TDto dto)
+        {
+            if (_validator == null)
+                return;
+
+            var result = await _validator.ValidateAsync(dto);
+
+            if (!result.IsValid)
+                throw new ValidationException(result.Errors);
         }
 
         // Get All (Exclude Deleted Records)
@@ -38,10 +54,21 @@ namespace Web.API.Services.CommonService.Implementation
             return _mapper.Map<TDto>(entity);
         }
 
+        public virtual async Task<TDto?> GetByIdAsync(Guid id)
+        {
+            var entity = await _dbSet.FirstOrDefaultAsync(x => x.IdGUID == id && !x.IsDeleted);
+            if (entity == null)
+                return default;
+
+            return _mapper.Map<TDto>(entity);
+        }
+
 
         // Create
         public virtual async Task<TDto> CreateAsync(TDto dto)
         {
+            await ValidateAsync(dto);
+
             var entity = _mapper.Map<TEntity>(dto);
             entity.IsDeleted = false;
 
@@ -55,6 +82,8 @@ namespace Web.API.Services.CommonService.Implementation
         // Update
         public virtual async Task<TDto?> UpdateAsync(TDto dto)
         {
+            await ValidateAsync(dto);
+
             var entity = _mapper.Map<TEntity>(dto);
 
             _dbSet.Update(entity);

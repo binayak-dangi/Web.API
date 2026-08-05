@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Web.API.Data;
-
+using FluentValidation; 
 using Web.API.Services.CommonService.Implementation;
 using Web.API.Models.Entities.Setup;
 using Web.API.Models.DTOS.Setup;
@@ -11,8 +11,8 @@ namespace Web.API.Services.Implementation.Setup
 {
     public class HREmployeeService : GenericService<HREmployee, HREmployeeDto>, IHREmployeeService
     {
-        public HREmployeeService(AppDbContext context, IMapper mapper)
-            : base(context, mapper)
+        public HREmployeeService(AppDbContext context, IMapper mapper, IValidator<HREmployeeDto> validator)
+            : base(context, mapper, validator)
         {
         }
 

@@ -6,6 +6,7 @@ namespace Web.API.Services.Interface.Setup
 {
     public interface IHRBranchService: IGenericService<HRBranchDto>
     {
-      
+        Task<bool> IsBranchExist(HRBranchDto dto);
+
     }
 }

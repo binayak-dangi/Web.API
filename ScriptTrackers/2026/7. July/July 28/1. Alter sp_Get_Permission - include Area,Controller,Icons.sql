@@ -244,7 +244,7 @@ Begin
     End
   End
 
-  IF @paramFor = 'HRPermissionByEmployee'
+IF @paramFor = 'HRPermissionByEmployee'
 Begin
     IF @paramType = 'GetAssignedPermissionList'
     Begin
