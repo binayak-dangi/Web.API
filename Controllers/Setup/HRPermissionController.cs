@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Web.API.Models.DTOS.Setup;
 using Web.API.Models.Common;
 using Web.API.Models.Entities.Setup;
-using Web.API.Services.Interface.Setup;
+using Web.API.Repositories.Setup.Interfaces;
 
 namespace Web.API.Controllers.Setup
 {
@@ -16,9 +16,9 @@ namespace Web.API.Controllers.Setup
     public class HRPermissionController : ControllerBase
     {
         private readonly ILogger<HRPermissionController> _logger;
-        private readonly IHRPermissionService _hrPermissionService;
+        private readonly IHRPermissionRepository _hrPermissionService;
 
-        public HRPermissionController(ILogger<HRPermissionController> logger, IHRPermissionService hrPermissionService)
+        public HRPermissionController(ILogger<HRPermissionController> logger, IHRPermissionRepository hrPermissionService)
         {
             _logger = logger;
             _hrPermissionService = hrPermissionService;
@@ -74,9 +74,7 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                permissionDto.Id = id;   // Set the ID from the route
-
-                var permission = await _hrPermissionService.UpdateAsync(permissionDto);
+                var permission = await _hrPermissionService.UpdateAsync(id, permissionDto);
 
                 if (permission == null)
                 {

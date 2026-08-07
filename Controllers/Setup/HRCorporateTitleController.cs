@@ -4,7 +4,7 @@ using Web.API.Models;
 using Web.API.Models.Common;
 using Web.API.Models.DTOS;
 using Web.API.Models.DTOS.Setup;
-using Web.API.Services.Interface.Setup;
+using Web.API.Repositories.Setup.Interfaces;
 
 namespace Web.API.Controllers.Setup
 {
@@ -14,9 +14,9 @@ namespace Web.API.Controllers.Setup
     public class HRCorporateTitleController : ControllerBase
     {
         private readonly ILogger<HRCorporateTitleController> _logger;
-        private readonly IHRCorporateTitleService _hrCorporateTitleService;
+        private readonly IHRCorporateTitleRepository _hrCorporateTitleService;
 
-        public HRCorporateTitleController(ILogger<HRCorporateTitleController> logger,IHRCorporateTitleService hrCorporateTitleService)
+        public HRCorporateTitleController(ILogger<HRCorporateTitleController> logger,IHRCorporateTitleRepository hrCorporateTitleService)
         {
             _logger = logger;
             _hrCorporateTitleService = hrCorporateTitleService;
@@ -110,9 +110,7 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                corporateTitleDto.Id = id;   // Set the ID from the route
-
-                var corporateTitle = await _hrCorporateTitleService.UpdateAsync(corporateTitleDto);
+                var corporateTitle = await _hrCorporateTitleService.UpdateAsync(id,corporateTitleDto);
 
                 if (corporateTitle == null)
                 {

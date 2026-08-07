@@ -7,10 +7,10 @@ using Web.API.Models.DTOS.Setup;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly IAuthService _authService;
+    private readonly IAuthRepository _authService;
     private readonly ILogger<AuthController> _logger;
 
-    public AuthController(IAuthService authService,ILogger<AuthController> logger)
+    public AuthController(IAuthRepository authService,ILogger<AuthController> logger)
     {
         _authService = authService;
         _logger = logger;

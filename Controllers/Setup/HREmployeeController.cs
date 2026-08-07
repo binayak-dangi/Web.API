@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Web.API.Models;
 using Web.API.Models.Common;
 using Web.API.Models.DTOS.Setup;
-using Web.API.Services.Interface.Setup;
+using Web.API.Repositories.Setup.Interfaces;
 
 namespace Web.API.Controllers.Setup
 {
@@ -14,10 +14,10 @@ namespace Web.API.Controllers.Setup
     public class HREmployeeController : ControllerBase
     {
         private readonly ILogger<HREmployeeController> _logger;
-        private readonly IHREmployeeService _hrEmployeeService;
+        private readonly IHREmployeeRepository _hrEmployeeService;
 
 
-        public HREmployeeController(ILogger<HREmployeeController> logger,IHREmployeeService hrEmployeeService)
+        public HREmployeeController(ILogger<HREmployeeController> logger,IHREmployeeRepository hrEmployeeService)
         {
             _logger = logger;
             _hrEmployeeService = hrEmployeeService;
@@ -111,9 +111,7 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                employeeDto.Id = id;   // Set the ID from the route
-
-                var employee = await _hrEmployeeService.UpdateAsync(employeeDto);
+                var employee = await _hrEmployeeService.UpdateAsync(id,employeeDto);
 
                 if (employee == null)
                 {

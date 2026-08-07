@@ -8,8 +8,8 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using System.Text.Json;
 using Web.API.Data;
-using Web.API.Services.Implementation.Setup;
-using Web.API.Services.Interface.Setup;
+using Web.API.Repositories.Setup.Implementations;
+using Web.API.Repositories.Setup.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,16 +22,16 @@ builder.Services.AddControllers(options =>
 {
     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
 });
-builder.Services.AddScoped<IHRRoleService, HRRoleService>();
-builder.Services.AddScoped<IHRBranchService, HRBranchService>();
-builder.Services.AddScoped<IHRCompanyService, HRCompanyService>();
-builder.Services.AddScoped<IHREmployeeService, HREmployeeService>();
-builder.Services.AddScoped<IHRCorporateTitleService, HRCorporateTitleService>();
-builder.Services.AddScoped<IHRFunctionalTitleService, HRFunctionalTitleService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IJwtService, JwtService>();
-builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
-builder.Services.AddScoped<IHRPermissionService, HRPermissionService>();
+builder.Services.AddScoped<IHRRoleRepository, HRRoleRepository>();
+builder.Services.AddScoped<IHRBranchRepository, HRBranchRepository>();
+builder.Services.AddScoped<IHRCompanyRepository, HRCompanyRepository>();
+builder.Services.AddScoped<IHREmployeeRepository, HREmployeeRepository>();
+builder.Services.AddScoped<IHRCorporateTitleRepository, HRCorporateTitleRepository>();
+builder.Services.AddScoped<IHRFunctionalTitleRepository, HRFunctionalTitleRepository>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IJwtRepository, JwtRepository>();
+builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+builder.Services.AddScoped<IHRPermissionRepository, HRPermissionRepository>();
 //Add Swagger
 builder.Services.AddEndpointsApiExplorer();
 //Add Authorize in swagger

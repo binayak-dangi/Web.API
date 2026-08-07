@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Web.API.Models;
 using Web.API.Models.Common;
 using Web.API.Models.DTOS.Setup;
-using Web.API.Services.Interface.Setup;
+using Web.API.Repositories.Setup.Interfaces;
 
 namespace Web.API.Controllers.Setup
 {
@@ -13,9 +13,9 @@ namespace Web.API.Controllers.Setup
     public class HRRoleController : ControllerBase
     {
         private readonly ILogger<HRRoleController> _logger;
-        private readonly IHRRoleService _hrRoleService;
+        private readonly IHRRoleRepository _hrRoleService;
 
-        public HRRoleController(ILogger<HRRoleController> logger,IHRRoleService hrRoleService)
+        public HRRoleController(ILogger<HRRoleController> logger,IHRRoleRepository hrRoleService)
         {
             _logger = logger;
             _hrRoleService = hrRoleService;
@@ -111,9 +111,7 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                roleDto.Id = id;   // Set the ID from the route
-
-                var role = await _hrRoleService.UpdateAsync(roleDto);
+                var role = await _hrRoleService.UpdateAsync(id, roleDto);
 
                 if (role == null)
                 {

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Web.API.Models.Common;
 using Web.API.Models.DTOS.Setup;
-using Web.API.Services.Interface.Setup;
+using Web.API.Repositories.Setup.Interfaces;
 
 namespace Web.API.Controllers.Setup
 {
@@ -12,9 +12,9 @@ namespace Web.API.Controllers.Setup
     public class HRBranchController : ControllerBase
     {
         private readonly ILogger<HRBranchController> _logger;
-        private readonly IHRBranchService _hrBranchService;
+        private readonly IHRBranchRepository _hrBranchService;
 
-        public HRBranchController(ILogger<HRBranchController> logger, IHRBranchService hrBranchService)
+        public HRBranchController(ILogger<HRBranchController> logger, IHRBranchRepository hrBranchService)
         {
             _logger = logger;
             _hrBranchService = hrBranchService;
@@ -117,9 +117,6 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                branchDto.Id = id;   // Set the ID from the route
-
-
                 if (await _hrBranchService.IsBranchExist(branchDto))
                 {
                     return Conflict(new ApiResponseModel<object>
@@ -129,7 +126,7 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                var branch = await _hrBranchService.UpdateAsync(branchDto);
+                var branch = await _hrBranchService.UpdateAsync(id,branchDto);
 
                 if (branch == null)
                 {

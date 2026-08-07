@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Web.API.Models.Common;
 using Web.API.Models.DTOS.Setup;
-using Web.API.Services.Interface.Setup;
+using Web.API.Repositories.Setup.Interfaces;
 
 namespace Web.API.Controllers.Setup
 {
@@ -12,9 +12,9 @@ namespace Web.API.Controllers.Setup
     public class HRCompanyController : ControllerBase
     {
         private readonly ILogger<HRCompanyController> _logger;
-        private readonly IHRCompanyService _hrCompanyService;
+        private readonly IHRCompanyRepository _hrCompanyService;
        
-        public HRCompanyController(ILogger<HRCompanyController> logger,IHRCompanyService hrCompanyService)
+        public HRCompanyController(ILogger<HRCompanyController> logger,IHRCompanyRepository hrCompanyService)
         {
             _logger = logger;
             _hrCompanyService = hrCompanyService;
@@ -108,9 +108,7 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                companyDto.Id = id;   // Set the ID from the route
-
-                var company = await _hrCompanyService.UpdateAsync(companyDto);
+                var company = await _hrCompanyService.UpdateAsync(id,companyDto);
 
                 if (company == null)
                 {

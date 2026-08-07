@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Web.API.Models;
 using Web.API.Models.Common;
 using Web.API.Models.DTOS.Setup;
-using Web.API.Services.Interface.Setup;
+using Web.API.Repositories.Setup.Interfaces;
 
 namespace Web.API.Controllers.Setup
 {
@@ -14,9 +14,9 @@ namespace Web.API.Controllers.Setup
     public class HRFunctionalTitleController : ControllerBase
     {
         private readonly ILogger<HRFunctionalTitleController> _logger;
-        private readonly IHRFunctionalTitleService _hrFunctionalTitleService;
+        private readonly IHRFunctionalTitleRepository _hrFunctionalTitleService;
 
-        public HRFunctionalTitleController(ILogger<HRFunctionalTitleController> logger,IHRFunctionalTitleService hrFunctionalTitleService)
+        public HRFunctionalTitleController(ILogger<HRFunctionalTitleController> logger,IHRFunctionalTitleRepository hrFunctionalTitleService)
         {
             _logger = logger;
             _hrFunctionalTitleService = hrFunctionalTitleService;
@@ -110,9 +110,7 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                functionalTitleDto.Id = id;   // Set the ID from the route
-
-                var functionalTitle = await _hrFunctionalTitleService.UpdateAsync(functionalTitleDto);
+                var functionalTitle = await _hrFunctionalTitleService.UpdateAsync(id, functionalTitleDto);
 
                 if (functionalTitle == null)
                 {
