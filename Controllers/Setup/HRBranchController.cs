@@ -21,11 +21,11 @@ namespace Web.API.Controllers.Setup
         }
 
         [HttpGet(Name = "GetBranches")]
-        public async Task<IActionResult> GetBranches()
+        public async Task<IActionResult> GetBranches([FromQuery] PaginationModel pagination)
         {
-            var branches = await _hrBranchService.GetAllAsync();
+            var branches = await _hrBranchService.GetAllAsync(pagination);
 
-            return Ok(new ApiResponseModel<List<HRBranchDto>>
+            return Ok(new ApiResponseModel<PagedResult<HRBranchDto>>
             {
                 Success = true,
                 Message = "Branches retrieved successfully.",

@@ -23,11 +23,11 @@ namespace Web.API.Controllers.Setup
         }
 
         [HttpGet(Name = "GetFunctionalTitles")]
-        public async Task<IActionResult> GetFunctionalTitles()
+        public async Task<IActionResult> GetFunctionalTitles([FromQuery] PaginationModel pagination)
         {
-            var functionalTitles = await _hrFunctionalTitleService.GetAllAsync();
+            var functionalTitles = await _hrFunctionalTitleService.GetAllAsync(pagination);
 
-            return Ok(new ApiResponseModel<List<HRFunctionalTitleDto>>
+            return Ok(new ApiResponseModel<PagedResult<HRFunctionalTitleDto>>
             {
                 Success = true,
                 Message = "Functional titles retrieved successfully.",

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Web.API.Models.Common;
 using Web.API.Models.DTOS.Setup;
+using Web.API.Models.Entities.Setup;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -10,7 +11,7 @@ public class AuthController : ControllerBase
     private readonly IAuthRepository _authService;
     private readonly ILogger<AuthController> _logger;
 
-    public AuthController(IAuthRepository authService,ILogger<AuthController> logger)
+    public AuthController(IAuthRepository authService, ILogger<AuthController> logger)
     {
         _authService = authService;
         _logger = logger;
@@ -28,6 +29,21 @@ public class AuthController : ControllerBase
             {
                 Success = false,
                 Message = "Invalid username or password."
+            });
+        }
+
+        if (result.Employee.isNewlyAdded)
+        {
+            return Ok(new ApiResponseModel<object>
+            {
+                Success = true,
+                Message = "Please change your password.",
+                Data = new
+                {
+                    Id = result.Employee.Id,
+                    Username = result.Employee.Username,
+                    IsNewlyAdded = true
+                }
             });
         }
 

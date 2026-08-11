@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using Web.API.Data;
 using Web.API.Models;
+using Web.API.Models.Common;
 
 namespace Web.API.Repositories.Common
 {
@@ -33,11 +35,50 @@ namespace Web.API.Repositories.Common
                 throw new ValidationException(result.Errors);
         }
 
-        // Get All (Exclude Deleted Records)
-        public virtual async Task<List<TDto>> GetAllAsync()
+        //search
+        protected virtual IQueryable<TEntity> ApplySearch(IQueryable<TEntity> query,string? searchKey)
         {
-            var entities = await _dbSet.Where(x => !x.IsDeleted).ToListAsync();
-            return _mapper.Map<List<TDto>>(entities);
+            return query;
+        }
+
+        // Get All (Exclude Deleted Records)
+        public virtual async Task<PagedResult<TDto>> GetAllAsync(PaginationModel pagination)
+        {
+            var page = pagination.Page ?? 1;
+            var pageSize = pagination.PageSize ?? 10;
+
+
+            // Base query
+            var query = _dbSet.AsNoTracking().Where(x => !x.IsDeleted);
+
+            // Search
+            query = ApplySearch(query, pagination.SearchKey);
+
+            // Total records
+            var totalRecords = await query.CountAsync();
+
+            // Sorting
+            query = query.ApplySorting(pagination.Sort, pagination.SortDir);
+
+            // Pagination
+            var entities = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+
+            // Map Entity -> DTO
+            var data = _mapper.Map<List<TDto>>(entities);
+
+            // Result
+            return new PagedResult<TDto>
+            {
+                Data = data,
+                Page = page,
+                PageSize = pageSize,
+                TotalRecords = totalRecords,
+                TotalPages = (int)Math.Ceiling(totalRecords / (double)pageSize)
+            };
         }
 
         // Get By Id (Exclude Deleted Records)
@@ -50,14 +91,6 @@ namespace Web.API.Repositories.Common
             return _mapper.Map<TDto>(entity);
         }
 
-        public virtual async Task<TDto?> GetByIdAsync(Guid id)
-        {
-            var entity = await _dbSet.FirstOrDefaultAsync(x => x.IdGUID == id && !x.IsDeleted);
-            if (entity == null)
-                return default;
-
-            return _mapper.Map<TDto>(entity);
-        }
 
         // Create
         public virtual async Task<TDto> CreateAsync(TDto dto)
@@ -74,7 +107,7 @@ namespace Web.API.Repositories.Common
         }
 
         // Update
-        public virtual async Task<TDto?> UpdateAsync(long id,TDto dto)
+        public virtual async Task<TDto?> UpdateAsync(long id, TDto dto)
         {
             // Validate
             await ValidateAsync(dto);
@@ -110,28 +143,6 @@ namespace Web.API.Repositories.Common
             return true;
         }
 
-        // Soft Delete
-        public virtual async Task<TDto?> SoftDeleteAsync(long id)
-        {
-            var entity = await _dbSet
-                .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
-
-            if (entity == null)
-                return default;
-
-            // Map before updating if you want the original values
-            var deletedDto = _mapper.Map<TDto>(entity);
-
-            entity.IsDeleted = true;
-
-            await _context.SaveChangesAsync();
-
-            // If you want the returned DTO to show IsDeleted = true,
-            // map after SaveChanges instead:
-            // deletedDto = _mapper.Map<TDto>(entity);
-
-            return deletedDto;
-        }
 
         // Soft Delete
         public virtual async Task<TDto?> SoftDeleteAsyncs(long id)

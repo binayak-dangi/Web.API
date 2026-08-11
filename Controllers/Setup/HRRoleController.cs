@@ -9,7 +9,7 @@ namespace Web.API.Controllers.Setup
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     public class HRRoleController : ControllerBase
     {
         private readonly ILogger<HRRoleController> _logger;
@@ -22,11 +22,11 @@ namespace Web.API.Controllers.Setup
         }
 
         [HttpGet(Name = "GetRoles")]
-        public async Task<IActionResult> GetRole()
+        public async Task<IActionResult> GetRole([FromQuery] PaginationModel pagination)
         {
-            var roles = await _hrRoleService.GetAllAsync();
+            var roles = await _hrRoleService.GetAllAsync(pagination);
 
-            return Ok(new ApiResponseModel<List<HRRoleDto>>
+            return Ok(new ApiResponseModel<PagedResult<HRRoleDto>>
             {
                 Success = true,
                 Message = "Roles retrieved successfully.",

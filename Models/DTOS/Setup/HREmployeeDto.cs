@@ -1,4 +1,6 @@
-﻿namespace Web.API.Models.DTOS.Setup
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Web.API.Models.DTOS.Setup
 {
     public class HREmployeeDto
     {
@@ -9,7 +11,7 @@
         public long IdHRBranch { get; set; }
         public long IdHRCorporateTitle { get; set; }
         public long IdHRFunctionalTitle { get; set; }
-
+       
         public string Username { get; set; } = null!;
 
         public string FirstName { get; set; } = null!;
@@ -31,25 +33,9 @@
         public string? PermanentAddress { get; set; }
 
         public string? TemporaryAddress { get; set; }
+        public bool isNewlyAdded { get; set; }
 
-        public string PasswordHash { get; set; } = null!;
-
-        public DateTime? LastPasswordAlterDate { get; set; }
-
-        public string? ImageGUID { get; set; }
-
-        public long? PasswordExpiryPeriod { get; set; }
-
-        public string? PasswordHistory { get; set; }
-
-        public DateTime? LastLoginDate { get; set; }
-
-        public long? LoginAttemptCount { get; set; }
-
-        public string? PasswordResetToken { get; set; }
-
-        public DateTime? PasswordResetTokenExpiry { get; set; }
         public long IdHRCompany { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 }

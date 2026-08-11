@@ -21,11 +21,11 @@ namespace Web.API.Controllers.Setup
         }
 
         [HttpGet(Name = "GetCompanies")]
-        public async Task<IActionResult> GetCompanies()
+        public async Task<IActionResult> GetCompanies([FromQuery] PaginationModel pagination)
         {
-            var companies = await _hrCompanyService.GetAllAsync();
+            var companies = await _hrCompanyService.GetAllAsync(pagination);
 
-            return Ok(new ApiResponseModel<List<HRCompanyDto>>
+            return Ok(new ApiResponseModel<PagedResult<HRCompanyDto>>
             {
                 Success = true,
                 Message = "Companies retrieved successfully.",

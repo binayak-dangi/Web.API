@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Web.API.Models.Entities.Setup;
 
-namespace Web.API.Models.Entities.Setup;
-
-public partial class EmailHistory : CommonModel
+public partial class EventLog : CommonModel
 {
-    public string MailCategory { get; set; } = null!;
+    public long IdHRCompany { get; set; }
+
+    public string EventType { get; set; } = null!;
 
     public string Subject { get; set; } = null!;
 
@@ -34,6 +33,4 @@ public partial class EmailHistory : CommonModel
     public string? AlternateEmailBody { get; set; }
 
     public string? TemplateData { get; set; }
-    public long IdHRCompany { get; set; }
-
 }

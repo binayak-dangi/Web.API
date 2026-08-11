@@ -32,6 +32,27 @@ namespace Web.API.Data
             modelBuilder.Entity<HRBranch>()
                 .HasIndex(x => x.BranchName)
                 .IsUnique();
+
+            modelBuilder.Entity<HREmployee>()
+                .HasIndex(x => x.Username)
+                .IsUnique();
+
+            modelBuilder.Entity<HRCompany>()
+                .HasIndex(x => x.CompanyName)
+                .IsUnique();
+            modelBuilder.Entity<HRBranch>()
+                .HasIndex(x => x.BranchName)
+                .IsUnique();
+            modelBuilder.Entity<HRRole>()
+                .HasIndex(x => x.RoleName)
+                .IsUnique();
+            modelBuilder.Entity<HRCorporateTitle>()
+                .HasIndex(x => x.LevelGrade)
+                .IsUnique();
+            modelBuilder.Entity<HRFunctionalTitle>()
+                .HasIndex(x => x.PositionHead)
+                .IsUnique();
+         
         }
     }
 

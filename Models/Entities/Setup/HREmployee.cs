@@ -38,6 +38,8 @@ public partial class HREmployee : CommonModel
 
     public DateTime? LastPasswordAlterDate { get; set; }
 
+    public bool isNewlyAdded { get; set; }
+
     public string? ImageGUID { get; set; }
 
     public long? PasswordExpiryPeriod { get; set; }

@@ -44,7 +44,8 @@ namespace Web.API.Repositories.Setup.Implementations
                     IdHRCompany = employee.IdHRCompany,
                     Email=employee.Email,
                     Username=employee.Username,
-                    
+                    isNewlyAdded=employee.isNewlyAdded
+
                 }
             };
         }

@@ -23,11 +23,11 @@ namespace Web.API.Controllers.Setup
         }
 
         [HttpGet(Name = "GetCorporateTitles")]
-        public async Task<IActionResult> GetCorporateTitles()
+        public async Task<IActionResult> GetCorporateTitles([FromQuery] PaginationModel pagination)
         {
-            var corporateTitles = await _hrCorporateTitleService.GetAllAsync();
+            var corporateTitles = await _hrCorporateTitleService.GetAllAsync(pagination);
 
-            return Ok(new ApiResponseModel<List<HRCorporateTitleDto>>
+            return Ok(new ApiResponseModel<PagedResult<HRCorporateTitleDto>>
             {
                 Success = true,
                 Message = "Corporate titles retrieved successfully.",

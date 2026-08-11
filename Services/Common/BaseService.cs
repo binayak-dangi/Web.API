@@ -1,4 +1,5 @@
 ﻿using Web.API.Models;
+using Web.API.Models.Common;
 using Web.API.Repositories.Common;
 
 namespace Web.API.Services.Common
@@ -15,9 +16,9 @@ namespace Web.API.Services.Common
         }
 
         // Get All (Exclude Deleted Records)
-        public virtual async Task<List<TDto>> GetAllAsync()
+        public virtual async Task<PagedResult<TDto>> GetAllAsync(PaginationModel pagination)
         {
-            return await _baseRepository.GetAllAsync();
+            return await _baseRepository.GetAllAsync(pagination);
         }
 
         // Get By Id (Exclude Deleted Records)

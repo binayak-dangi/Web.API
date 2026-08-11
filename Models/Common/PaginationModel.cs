@@ -5,14 +5,10 @@ namespace Web.API.Models.Common
 {
     public class PaginationModel
     {
-        //public object Id { get; set; }
-        //public int IdHRCompany { get; set; }
-        //public int IDHREmployee { get; set; }
-        //public int IdHRBranch { get; set; } = 9;
-        public int? page { get; set; } = 1;
-        public int? pagesize { get; set; } = 10;
-        public string? sort { get; set; } = "Id";
-        public string? sortdir { get; set; } = "DESC";
-        public string? searchKey { get; set; } = "";
+        public int? Page { get; set; } = 1;
+        public int? PageSize { get; set; } = 10;
+        public string? Sort { get; set; } = "Id";
+        public string? SortDir { get; set; } = "DESC";
+        public string? SearchKey { get; set; } = "";
     }
 }

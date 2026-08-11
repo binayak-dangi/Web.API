@@ -1,8 +1,10 @@
-﻿namespace Web.API.Services.Common
+﻿using Web.API.Models.Common;
+
+namespace Web.API.Services.Common
 {
     public interface IBaseService<TDto>
     {
-        Task<List<TDto>> GetAllAsync();
+        Task<PagedResult<TDto>> GetAllAsync(PaginationModel pagination);
         Task<TDto?> GetByIdAsync(long id);
         Task<TDto> CreateAsync(TDto dto);
         Task<TDto?> UpdateAsync(long id, TDto dto);

@@ -25,11 +25,11 @@ namespace Web.API.Controllers.Setup
         }
 
         [HttpGet(Name = "GetPermissions")]
-        public async Task<IActionResult> GetPermissions()
+        public async Task<IActionResult> GetPermissions([FromQuery] PaginationModel pagination)
         {
-            var permissions = await _hrPermissionService.GetAllAsync();
+            var permissions = await _hrPermissionService.GetAllAsync(pagination);
 
-            return Ok(new ApiResponseModel<List<HRPermissionDto>>
+            return Ok(new ApiResponseModel<PagedResult<HRPermissionDto>>
             {
                 Success = true,
                 Message = "Permissions retrieved successfully.",
