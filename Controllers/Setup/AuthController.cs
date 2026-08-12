@@ -242,7 +242,7 @@ public class AuthController : ControllerBase
                 });
             }
 
-            var IdUserSessionClaim = User.FindFirstValue("IDHREmployee");
+            var IdUserSessionClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!long.TryParse(IdUserSessionClaim, out IdUserSession))
             {
                 return Unauthorized(new ApiResponseModel<object>

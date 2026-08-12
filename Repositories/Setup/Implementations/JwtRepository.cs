@@ -29,12 +29,13 @@ namespace Web.API.Repositories.Setup.Implementations
                    new Claim(ClaimTypes.Email, employee.Email ?? string.Empty),
                    new Claim("IDHREmployee", employee.Id.ToString()),
                    new Claim("IdBranch", employee.IdHRBranch.ToString()),
-                   new Claim("IdRole", employee.IdHRRole.ToString())
+                   new Claim("IdRole", employee.IdHRRole.ToString()),
+                   new Claim(ClaimTypes.Role, employee.HRRole?.RoleName ?? string.Empty)
                };
 
 
             var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+                Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!)); 
 
             var credentials = new SigningCredentials(
                 key,

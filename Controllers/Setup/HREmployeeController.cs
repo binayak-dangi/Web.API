@@ -199,13 +199,26 @@ namespace Web.API.Controllers.Setup
         {
             try
             {
-                var IdUserRoleSession=User.FindFirstValue()
+                var roleName = User.FindFirstValue(ClaimTypes.Role);
+
+                if (!string.Equals(roleName, "System", StringComparison.OrdinalIgnoreCase) && !string.Equals(roleName, "Admin", StringComparison.OrdinalIgnoreCase))
+                {
+                    return StatusCode(StatusCodes.Status403Forbidden,
+                        new ApiResponseModel<object>
+                        {
+                            Success = false,
+                            Message = "You do not have permission to reset passwords.",
+                            Data = null
+                        });
+                }
+
                 var employeeDto = new HREmployeeDto
                 {
                     Id = id
                 };
 
-                var result = await _employeeRepository.ResetPasswordAsync(employeeDto);
+                var result =
+                    await _employeeRepository.ResetPasswordAsync(employeeDto);
 
                 if (result == null)
                 {
@@ -241,7 +254,6 @@ namespace Web.API.Controllers.Setup
                     });
             }
         }
-
 
         [HttpGet("check-username")]
         public async Task<IActionResult> CheckUsername(string username)
