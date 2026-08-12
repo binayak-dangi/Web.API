@@ -32,8 +32,6 @@ namespace Web.API.Repositories.Setup.Implementations
                    new Claim("IdRole", employee.IdHRRole.ToString())
                };
 
-            // Optional claims
-            // claims.Add(new Claim(ClaimTypes.Role, employee.RoleName));
 
             var key = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));

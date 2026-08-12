@@ -74,6 +74,23 @@ namespace Web.API.Repositories.Setup.Implementations
             return true;
         }
 
+        public async Task<bool> RevokeAllTokens(long employeeId)
+        {
+            var tokens = await _context.RefreshToken.Where(x => x.IDHREmployee == employeeId && !x.IsRevoked).ToListAsync();
+
+            if (!tokens.Any())
+                return true;
+
+            foreach (var token in tokens)
+            {
+                token.IsRevoked = true;
+            } 
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
         public async Task<RefreshToken> RotateToken(string token)
         {
             var refreshToken = await GetToken(token);

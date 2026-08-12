@@ -7,4 +7,9 @@ public interface IAuthRepository
     Task<LoginResponseDto?> RefreshToken(string refreshToken);
 
     Task<bool> LogoutAsync(string refreshToken);
+
+    Task<PasswordSetupResult> CompleteFirstPasswordAsync(CompleteFirstPasswordDto dto);
+
+    Task<bool> ChangePasswordAsync(long employeeId, ChangePasswordDto dto);
+
 }

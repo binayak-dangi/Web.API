@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Web.API.Models.Common;
 using Web.API.Models.DTOS.Setup;
 using Web.API.Models.Entities.Setup;
+using Web.API.Repositories.Setup.Interfaces;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -136,71 +138,154 @@ public class AuthController : ControllerBase
         });
     }
 
-    //[HttpPost("login")]
-    //[AllowAnonymous]
-    //public async Task<IActionResult> Login(LoginRequestDto request)
-    //{
-    //    var result = await _authService.LoginAsync(request);
+   
+    [HttpPost("complete-first-password")]
+    [AllowAnonymous]
+    public async Task<IActionResult> CompleteFirstPassword(
+    [FromBody] CompleteFirstPasswordDto dto)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ApiResponseModel<object>
+                {
+                    Success = false,
+                    Message = "Invalid request.",
+                    Data = null
+                });
+            }
 
-    //    if (result == null)
-    //    {
-    //        return Unauthorized(new ApiResponseModel<object>
-    //        {
-    //            Success = false,
-    //            Message = "Invalid username or password."
-    //        });
-    //    }
+            var result = await _authService.CompleteFirstPasswordAsync(dto);
 
-    //    return Ok(new ApiResponseModel<LoginResponseDto>
-    //    {
-    //        Success = true,
-    //        Message = "Login successful.",
-    //        Data = result
-    //    });
-    //}
+            if (result == PasswordSetupResult.EmployeeNotFound ||
+                result == PasswordSetupResult.InvalidCurrentPassword)
+            {
+                return Unauthorized(new ApiResponseModel<object>
+                {
+                    Success = false,
+                    Message = "Invalid username or password.",
+                    Data = null
+                });
+            }
 
+            if (result == PasswordSetupResult.NotNewlyAdded)
+            {
+                return BadRequest(new ApiResponseModel<object>
+                {
+                    Success = false,
+                    Message = "This user is not a newly added user. Please use the password reset option.",
+                    Data = null
+                });
+            }
 
-    //[HttpPost("refresh-token")]
-    //[AllowAnonymous]
-    //public async Task<IActionResult> RefreshToken(RefreshTokenRequestDto request)
-    //{
-    //    var result = await _authService.RefreshToken(request.Token);
+            if (result == PasswordSetupResult.PasswordMismatch)
+            {
+                return BadRequest(new ApiResponseModel<object>
+                {
+                    Success = false,
+                    Message = "New password and confirm password do not match.",
+                    Data = null
+                });
+            }
 
-    //    if (result == null)
-    //    {
-    //        return Unauthorized(new ApiResponseModel<object>
-    //        {
-    //            Success = false,
-    //            Message = "Invalid or expired refresh token."
-    //        });
-    //    }
+            if (result == PasswordSetupResult.Success)
+            {
+                return Ok(new ApiResponseModel<object>
+                {
+                    Success = true,
+                    Message = "Password changed successfully. Please login with your new password.",
+                    Data = null
+                });
+            }
 
-    //    return Ok(new ApiResponseModel<LoginResponseDto>
-    //    {
-    //        Success = true,
-    //        Message = "Token refreshed successfully.",
-    //        Data = result
-    //    });
-    //}
+            return BadRequest(new ApiResponseModel<object>
+            {
+                Success = false,
+                Message = "Unable to change password.",
+                Data = null
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(
+                ex,
+                "Error occurred while completing first password setup for {Username}.",
+                dto.Username);
 
-    //[HttpPost("logout")]
-    //public async Task<IActionResult> Logout(RefreshTokenRequestDto request)
-    //{
-    //    var result = await _authService.LogoutAsync(request.Token);
+            return StatusCode(
+                StatusCodes.Status500InternalServerError,
+                new ApiResponseModel<object>
+                {
+                    Success = false,
+                    Message = "An error occurred while changing the password.",
+                    Data = null
+                });
+        }
+    }
 
-    //    if (!result)
-    //    {
-    //        return BadRequest(new ApiResponseModel<object>
-    //        {
-    //            Success = false,
-    //            Message = "Invalid refresh token."
-    //        });
-    //    }
+    [Authorize]
+    [HttpPost("change-password")]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+    {
 
-    //    return Ok(new ApiResponseModel<object>
-    //    {
-    //        Success = true,
-    //        Message = "Logout successful."
-    //    });
-    //}
+        long IdUserSession = 0;
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ApiResponseModel<object>
+                {
+                    Success = false,
+                    Message = "Invalid request.",
+                    Data = null
+                });
+            }
+
+            var IdUserSessionClaim = User.FindFirstValue("IDHREmployee");
+            if (!long.TryParse(IdUserSessionClaim, out IdUserSession))
+            {
+                return Unauthorized(new ApiResponseModel<object>
+                {
+                    Success = false,
+                    Message = "Invalid user session.",
+                    Data = null
+                });
+            }
+
+            var result = await _authService.ChangePasswordAsync(IdUserSession, dto);
+
+            if (!result)
+            {
+                return BadRequest(new ApiResponseModel<object>
+                {
+                    Success = false,
+                    Message = "Current password is incorrect.",
+                    Data = null
+                });
+            }
+
+            return Ok(new ApiResponseModel<object>
+            {
+                Success = true,
+                Message = "Password changed successfully. Please login again.",
+                Data = null
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(
+                ex,
+                "Error occurred while changing password for employee {EmployeeId}.", IdUserSession);
+
+            return StatusCode(
+                StatusCodes.Status500InternalServerError,
+                new ApiResponseModel<object>
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Data = null
+                });
+        }
+    }
 }

@@ -10,7 +10,6 @@ namespace Web.API.Repositories.Setup.Interfaces
         Task<HREmployee?> Authenticate(string username, string password);
         Task<HREmployeeDto> CreateEmployeeAsync(HREmployeeDto employeeDto);
         Task<HREmployeeDto?> ResetPasswordAsync(HREmployeeDto employeeDto);
-        Task<bool> ChangePasswordAsync(ChangePasswordDto dto);
         Task<bool> IsUsernameAvailableAsync(string username);
 
     }

@@ -31,9 +31,9 @@ namespace Web.API.Repositories.Setup.Implementations
             // Get default password based on role
             string defaultPassword = role.RoleName switch
             {
-                "Admin" => _configuration["EmployeePasswords:Admin"] ?? "Admin123",
-                "System" => _configuration["EmployeePasswords:System"] ?? "System123",
-                "Employee" => _configuration["EmployeePasswords:Employee"] ?? "123456",
+                "Admin" => _configuration["DefaultPassword:Admin"]?? "12345",
+                "System" => _configuration["DefaultPassword:System"]?? "12345",
+                "Employee" => _configuration["DefaultPassword:Employee"]?? "12345",
                 _ => "12345"
             };
 
@@ -67,10 +67,10 @@ namespace Web.API.Repositories.Setup.Implementations
 
             string defaultPassword = employee.HRRole.RoleName switch
             {
-                "Admin" => _configuration["EmployeePasswords:Admin"] ?? "Admin123",
-                "System" => _configuration["EmployeePasswords:System"] ?? "System123",
-                "Employee" => _configuration["EmployeePasswords:Employee"] ?? "123456",
-                _ => "123456"
+                "Admin" => _configuration["DefaultPassword:Admin"]?? "12345",
+                "System" => _configuration["DefaultPassword:System"]?? "12345",
+                "Employee" => _configuration["DefaultPassword:Employee"]?? "12345",
+                _ => "12345"
             };
 
             employee.PasswordHash =
@@ -82,35 +82,6 @@ namespace Web.API.Repositories.Setup.Implementations
             await _context.SaveChangesAsync();
 
             return _mapper.Map<HREmployeeDto>(employee);
-        }
-
-        public async Task<bool> ChangePasswordAsync(ChangePasswordDto dto)
-        {
-            var employee = await _context.HREmployee
-                .FirstOrDefaultAsync(x => x.Username == dto.Username);
-
-            if (employee == null)
-                return false;
-
-            if (string.IsNullOrEmpty(employee.PasswordHash))
-                return false;
-
-            // Check current password
-            bool currentPasswordValid = BCrypt.Net.BCrypt.Verify(dto.CurrentPassword, employee.PasswordHash);
-
-            if (!currentPasswordValid)
-                return false;
-
-            // Check new password confirmation
-            if (dto.NewPassword != dto.ConfirmNewPassword)
-                throw new Exception("New password and confirm password do not match.");
-
-            // Hash new password
-            employee.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
-            employee.isNewlyAdded = false;
-            await _context.SaveChangesAsync();
-
-            return true;
         }
 
         public async Task<bool> IsUsernameAvailableAsync(string username)

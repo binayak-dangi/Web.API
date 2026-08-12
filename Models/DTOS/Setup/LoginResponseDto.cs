@@ -6,7 +6,8 @@
 
         public string RefreshToken { get; set; } = string.Empty;
 
-        public DateTime ExpiresAt { get; set; }
+        public DateTime? ExpiresAt { get; set; }
+        public bool RequiresPasswordSetup { get; set; }
 
         public HREmployeeDto Employee { get; set; } = null!;
     }

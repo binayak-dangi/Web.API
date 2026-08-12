@@ -10,6 +10,8 @@ namespace Web.API.Repositories.Setup.Interfaces
 
         Task<bool> RevokeToken(string token);
 
+        Task<bool> RevokeAllTokens(long employeeId);
+
         Task<RefreshToken> RotateToken(string token);
     }
 }

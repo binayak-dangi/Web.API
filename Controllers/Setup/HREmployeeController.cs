@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Security.Claims;
 using Web.API.Models;
 using Web.API.Models.Common;
 using Web.API.Models.DTOS.Setup;
@@ -16,19 +16,19 @@ namespace Web.API.Controllers.Setup
     public class HREmployeeController : ControllerBase
     {
         private readonly ILogger<HREmployeeController> _logger;
-        private readonly IHREmployeeRepository _hrEmployeeService;
+        private readonly IHREmployeeRepository _employeeRepository;
 
 
-        public HREmployeeController(ILogger<HREmployeeController> logger, IHREmployeeRepository hrEmployeeService)
+        public HREmployeeController(ILogger<HREmployeeController> logger, IHREmployeeRepository employeeRepository)
         {
             _logger = logger;
-            _hrEmployeeService = hrEmployeeService;
+            _employeeRepository = employeeRepository;
         }
 
         [HttpGet(Name = "GetEmployees")]
         public async Task<IActionResult> GetEmployees([FromQuery] PaginationModel pagination)
         {
-            var employee = await _hrEmployeeService.GetAllAsync(pagination);
+            var employee = await _employeeRepository.GetAllAsync(pagination);
 
             return Ok(new ApiResponseModel<PagedResult<HREmployeeDto>>
             {
@@ -41,7 +41,7 @@ namespace Web.API.Controllers.Setup
         [HttpGet("{id}", Name = "GetEmployeeById")]
         public async Task<IActionResult> GetEmployeeById(long id)
         {
-            var employee = await _hrEmployeeService.GetByIdAsync(id);
+            var employee = await _employeeRepository.GetByIdAsync(id);
             if (employee == null)
             {
                 return BadRequest(new ApiResponseModel<object>
@@ -75,7 +75,7 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                var employee = await _hrEmployeeService.CreateEmployeeAsync(employeeDto);
+                var employee = await _employeeRepository.CreateEmployeeAsync(employeeDto);
 
                 return Ok(new ApiResponseModel<HREmployeeDto>
                 {
@@ -113,7 +113,7 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                var employee = await _hrEmployeeService.UpdateAsync(id, employeeDto);
+                var employee = await _employeeRepository.UpdateAsync(id, employeeDto);
 
                 if (employee == null)
                 {
@@ -161,7 +161,7 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                var deletedEmployee = await _hrEmployeeService.SoftDeleteAsyncs(id);
+                var deletedEmployee = await _employeeRepository.SoftDeleteAsyncs(id);
 
                 if (deletedEmployee == null)
                 {
@@ -194,28 +194,52 @@ namespace Web.API.Controllers.Setup
             }
         }
 
-        [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword( [FromBody] HREmployeeDto employeeDto)
+        [HttpPost("reset-password/{id:long}")]
+        public async Task<IActionResult> ResetPassword(long id)
         {
-            var employee = await _hrEmployeeService
-                .ResetPasswordAsync(employeeDto);
-
-            if (employee == null)
+            try
             {
-                return NotFound(new ApiResponseModel<object>
+                var IdUserRoleSession=User.FindFirstValue()
+                var employeeDto = new HREmployeeDto
                 {
-                    Success = false,
-                    Message = "Employee not found.",
+                    Id = id
+                };
+
+                var result = await _employeeRepository.ResetPasswordAsync(employeeDto);
+
+                if (result == null)
+                {
+                    return NotFound(new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        Message = "Employee not found.",
+                        Data = null
+                    });
+                }
+
+                return Ok(new ApiResponseModel<object>
+                {
+                    Success = true,
+                    Message = "Password reset successfully. Employee must set a new password on next login.",
                     Data = null
                 });
             }
-
-            return Ok(new ApiResponseModel<HREmployeeDto>
+            catch (Exception ex)
             {
-                Success = true,
-                Message = "Password reset successfully.",
-                Data = employee
-            });
+                _logger.LogError(
+                    ex,
+                    "Error occurred while resetting password for employee {EmployeeId}.",
+                    id);
+
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        Message = "An error occurred while resetting the password.",
+                        Data = null
+                    });
+            }
         }
 
 
@@ -248,7 +272,7 @@ namespace Web.API.Controllers.Setup
             }
 
             bool isAvailable =
-                await _hrEmployeeService.IsUsernameAvailableAsync(username);
+                await _employeeRepository.IsUsernameAvailableAsync(username);
 
             return Ok(new ApiResponseModel<object>
             {
@@ -262,52 +286,6 @@ namespace Web.API.Controllers.Setup
                 }
             });
         }
-        [HttpPost("change-password")]
-        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(new ApiResponseModel<object>
-                    {
-                        Success = false,
-                        Message = "Invalid request.",
-                        Data = null
-                    });
-                }
-
-                var result = await _hrEmployeeService.ChangePasswordAsync(dto);
-
-                if (!result)
-                {
-                    return BadRequest(new ApiResponseModel<object>
-                    {
-                        Success = false,
-                        Message = "Current password is incorrect.",
-                        Data = null
-                    });
-                }
-
-                return Ok(new ApiResponseModel<object>
-                {
-                    Success = true,
-                    Message = "Password changed successfully.",
-                    Data = null
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred while changing password for employee {Username}.", dto.Username);
-
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    new ApiResponseModel<object>
-                    {
-                        Success = false,
-                        Message = ex.Message,
-                        Data = null
-                    });
-            }
-        }
+       
     }
 }
