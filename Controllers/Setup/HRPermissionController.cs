@@ -8,11 +8,9 @@ using Web.API.Repositories.Setup.Interfaces;
 
 namespace Web.API.Controllers.Setup
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-
-    [AllowAnonymous]
-    //[Authorize]
     public class HRPermissionController : ControllerBase
     {
         private readonly ILogger<HRPermissionController> _logger;

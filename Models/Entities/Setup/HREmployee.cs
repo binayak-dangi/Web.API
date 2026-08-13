@@ -56,6 +56,9 @@ public partial class HREmployee : CommonModel
     public long IdHRCompany { get; set; }
 
 
+    [ForeignKey(nameof(IdHRCompany))]
+    public virtual HRCompany HRCompany { get; set; } = null!;
+
     [ForeignKey(nameof(IdHRRole))]
     public virtual HRRole HRRole { get; set; } = null!;
 

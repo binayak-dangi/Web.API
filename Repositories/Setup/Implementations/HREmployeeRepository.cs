@@ -130,5 +130,75 @@ namespace Web.API.Repositories.Setup.Implementations
 
             return employee;
         }
+
+        public async Task<HREmployeeDto?> GetMyProfileAsync(long employeeId)
+        {
+            var employee = await _context.HREmployee
+                .Include(x => x.HRRole)
+                .Include(x => x.HRCompany)
+                .Include(x => x.HRBranch)
+                .FirstOrDefaultAsync(x => x.Id == employeeId);
+
+            if (employee == null)
+                return null;
+
+            return new HREmployeeDto
+            {
+                Id = employee.Id,
+                FirstName = employee.FirstName,
+                MiddleName = employee.MiddleName,
+                LastName = employee.LastName,
+                Email = employee.Email,
+                PhoneNumber = employee.PhoneNumber,
+                Username = employee.Username,
+
+                // Read-only information
+                RoleName = employee.HRRole?.RoleName,
+                IdHRRole=employee.IdHRRole,
+                CompanyName = employee.HRCompany?.CompanyName,
+                IdHRCompany=employee.IdHRCompany,
+                BranchName = employee.HRBranch?.BranchName,
+                IdHRBranch=employee.IdHRBranch
+            };
+        }
+
+        public async Task<HREmployeeDto?> UpdateMyProfileAsync(long employeeId,UpdateMyProfileDto dto)
+        {
+            var employee = await _context.HREmployee
+                .Include(x => x.HRRole)
+                .Include(x => x.HRCompany)
+                .Include(x => x.HRBranch)
+                .FirstOrDefaultAsync(x => x.Id == employeeId);
+
+            if (employee == null)
+                return null;
+
+            // Only update fields the employee is allowed to change
+
+            employee.FirstName = dto.FirstName;
+            employee.MiddleName = dto.MiddleName;
+            employee.LastName = dto.LastName;
+            employee.Email = dto.Email;
+            employee.PhoneNumber = dto.PhoneNumber;
+
+            await _context.SaveChangesAsync();
+
+            return new HREmployeeDto
+            {
+                Id = employee.Id,
+                FirstName = employee.FirstName,
+                MiddleName = employee.MiddleName,
+                LastName = employee.LastName,
+                Email = employee.Email,
+                PhoneNumber = employee.PhoneNumber,
+                Username = employee.Username,
+                RoleName = employee.HRRole?.RoleName,
+                IdHRRole = employee.IdHRRole,
+                CompanyName = employee.HRCompany?.CompanyName,
+                IdHRCompany = employee.IdHRCompany,
+                BranchName = employee.HRBranch?.BranchName,
+                IdHRBranch = employee.IdHRBranch
+            };
+        }
     }
 }

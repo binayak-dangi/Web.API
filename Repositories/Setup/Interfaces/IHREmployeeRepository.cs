@@ -11,6 +11,8 @@ namespace Web.API.Repositories.Setup.Interfaces
         Task<HREmployeeDto> CreateEmployeeAsync(HREmployeeDto employeeDto);
         Task<HREmployeeDto?> ResetPasswordAsync(HREmployeeDto employeeDto);
         Task<bool> IsUsernameAvailableAsync(string username);
+        Task<HREmployeeDto?> GetMyProfileAsync(long employeeId);
+        Task<HREmployeeDto?> UpdateMyProfileAsync(long employeeId, UpdateMyProfileDto dto);
 
     }
 }

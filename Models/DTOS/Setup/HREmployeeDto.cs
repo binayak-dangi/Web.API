@@ -7,8 +7,11 @@ namespace Web.API.Models.DTOS.Setup
         public long Id { get; set; }
 
         public long IdHRRole { get; set; }
+        public string?RoleName { get; set; } = null;
 
         public long IdHRBranch { get; set; }
+        public string? BranchName { get; set; } = null;
+
         public long IdHRCorporateTitle { get; set; }
         public long IdHRFunctionalTitle { get; set; }
        
@@ -36,6 +39,7 @@ namespace Web.API.Models.DTOS.Setup
         public bool isNewlyAdded { get; set; }
 
         public long IdHRCompany { get; set; }
+        public string? CompanyName { get; set; } = null;
         public bool IsActive { get; set; } = true;
     }
 }
