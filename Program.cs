@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using System.Text.Json;
 using Web.API.Data;
+using Web.API.Filters;
 using Web.API.Repositories.Setup.Implementations;
 using Web.API.Repositories.Setup.Interfaces;
 
@@ -17,6 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add(new AuthorizeFilter());
+    //options.Filters.Add<ActivityLogFilter>();
 })
 .AddJsonOptions(options =>
 {
@@ -32,6 +34,7 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IJwtRepository, JwtRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IHRPermissionRepository, HRPermissionRepository>();
+//builder.Services.AddScoped<IActivityLogRepository, ActivityLogRepository>();
 //Add Swagger
 builder.Services.AddEndpointsApiExplorer();
 //Add Authorize in swagger

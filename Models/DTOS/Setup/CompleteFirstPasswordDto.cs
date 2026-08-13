@@ -17,6 +17,7 @@
         EmployeeNotFound,
         NotNewlyAdded,
         InvalidCurrentPassword,
-        PasswordMismatch
+        PasswordMismatch,
+        NewPasswordSameAsCurrent
     }
 }

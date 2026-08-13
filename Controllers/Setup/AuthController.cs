@@ -189,6 +189,16 @@ public class AuthController : ControllerBase
                 });
             }
 
+            if (result == PasswordSetupResult.NewPasswordSameAsCurrent)
+            {
+                return BadRequest(new ApiResponseModel<object>
+                {
+                    Success = false,
+                    Message = "New password must be different from your current password.",
+                    Data = null
+                });
+            }
+
             if (result == PasswordSetupResult.Success)
             {
                 return Ok(new ApiResponseModel<object>

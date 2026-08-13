@@ -14,7 +14,7 @@ namespace Web.API.Repositories.Setup.Implementations
         private readonly IRefreshTokenRepository _refreshTokenService;
         private readonly AppDbContext _context;
 
-        public AuthRepository(IHREmployeeRepository employeeRepository, IJwtRepository jwtService, IRefreshTokenRepository refreshTokenService,AppDbContext context)
+        public AuthRepository(IHREmployeeRepository employeeRepository, IJwtRepository jwtService, IRefreshTokenRepository refreshTokenService, AppDbContext context)
         {
             _employeeRepository = employeeRepository;
             _jwtService = jwtService;
@@ -139,6 +139,11 @@ namespace Web.API.Repositories.Setup.Implementations
             if (dto.NewPassword != dto.ConfirmNewPassword)
                 return PasswordSetupResult.PasswordMismatch;
 
+            if (BCrypt.Net.BCrypt.Verify(dto.NewPassword,employee.PasswordHash))
+            {
+                return PasswordSetupResult.NewPasswordSameAsCurrent;
+            }
+
             employee.PasswordHash =
                 BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
 
@@ -149,7 +154,7 @@ namespace Web.API.Repositories.Setup.Implementations
             return PasswordSetupResult.Success;
         }
 
-        public async Task<bool> ChangePasswordAsync(long employeeId,ChangePasswordDto dto)
+        public async Task<bool> ChangePasswordAsync(long employeeId, ChangePasswordDto dto)
         {
 
             var employee = await _context.HREmployee
@@ -172,6 +177,10 @@ namespace Web.API.Repositories.Setup.Implementations
             if (dto.NewPassword != dto.ConfirmNewPassword)
                 throw new Exception(
                     "New password and confirm password do not match.");
+
+            if (dto.CurrentPassword == dto.NewPassword)
+                throw new Exception(
+                    "New password must be different from your current password.");
 
             employee.PasswordHash =
                 BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);

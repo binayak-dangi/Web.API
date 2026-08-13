@@ -23,35 +23,36 @@ namespace Web.API.Data
         public DbSet<HRCorporateTitle> HRCorporateTitle { get; set; }
         public DbSet<HRFunctionalTitle> HRFunctionalTitle { get; set; }
         public DbSet<RefreshToken> RefreshToken { get; set; }
+        public DbSet<ActivityLog> ActivityLog { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<HRBranch>()
-                .HasIndex(x => x.BranchName)
-                .IsUnique();
+            //modelBuilder.Entity<HRBranch>()
+            //    .HasIndex(x => x.BranchName)
+            //    .IsUnique();
 
-            modelBuilder.Entity<HREmployee>()
-                .HasIndex(x => x.Username)
-                .IsUnique();
+            //modelBuilder.Entity<HREmployee>()
+            //    .HasIndex(x => x.Username)
+            //    .IsUnique();
 
-            modelBuilder.Entity<HRCompany>()
-                .HasIndex(x => x.CompanyName)
-                .IsUnique();
-            modelBuilder.Entity<HRBranch>()
-                .HasIndex(x => x.BranchName)
-                .IsUnique();
-            modelBuilder.Entity<HRRole>()
-                .HasIndex(x => x.RoleName)
-                .IsUnique();
-            modelBuilder.Entity<HRCorporateTitle>()
-                .HasIndex(x => x.LevelGrade)
-                .IsUnique();
-            modelBuilder.Entity<HRFunctionalTitle>()
-                .HasIndex(x => x.PositionHead)
-                .IsUnique();
+            //modelBuilder.Entity<HRCompany>()
+            //    .HasIndex(x => x.CompanyName)
+            //    .IsUnique();
+            //modelBuilder.Entity<HRBranch>()
+            //    .HasIndex(x => x.BranchName)
+            //    .IsUnique();
+            //modelBuilder.Entity<HRRole>()
+            //    .HasIndex(x => x.RoleName)
+            //    .IsUnique();
+            //modelBuilder.Entity<HRCorporateTitle>()
+            //    .HasIndex(x => x.LevelGrade)
+            //    .IsUnique();
+            //modelBuilder.Entity<HRFunctionalTitle>()
+            //    .HasIndex(x => x.PositionHead)
+            //    .IsUnique();
          
         }
     }

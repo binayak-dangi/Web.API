@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Web.API.Data;
 
@@ -11,9 +12,11 @@ using Web.API.Data;
 namespace Web.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260813082645_addActivityLogTable")]
+    partial class addActivityLogTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,7 +90,7 @@ namespace Web.API.Migrations
 
                     b.Property<string>("BranchName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Created_By")
                         .IsRequired()
@@ -120,6 +123,9 @@ namespace Web.API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BranchName")
+                        .IsUnique();
+
                     b.ToTable("HRBranch");
                 });
 
@@ -133,7 +139,7 @@ namespace Web.API.Migrations
 
                     b.Property<string>("CompanyName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Created_By")
                         .IsRequired()
@@ -162,6 +168,9 @@ namespace Web.API.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyName")
+                        .IsUnique();
 
                     b.ToTable("HRCompany");
                 });
@@ -203,7 +212,7 @@ namespace Web.API.Migrations
 
                     b.Property<string>("LevelGrade")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal?>("MaxAllowance")
                         .HasColumnType("decimal(18,2)");
@@ -232,6 +241,9 @@ namespace Web.API.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LevelGrade")
+                        .IsUnique();
 
                     b.ToTable("HRCorporateTitle");
                 });
@@ -344,7 +356,7 @@ namespace Web.API.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("isNewlyAdded")
                         .HasColumnType("bit");
@@ -360,6 +372,9 @@ namespace Web.API.Migrations
                     b.HasIndex("IdHRFunctionalTitle");
 
                     b.HasIndex("IdHRRole");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.ToTable("HREmployee");
                 });
@@ -477,7 +492,7 @@ namespace Web.API.Migrations
 
                     b.Property<string>("PositionHead")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<long>("PositionOrder")
                         .HasColumnType("bigint");
@@ -490,6 +505,9 @@ namespace Web.API.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PositionHead")
+                        .IsUnique();
 
                     b.ToTable("HRFunctionalTitle");
                 });
@@ -603,7 +621,7 @@ namespace Web.API.Migrations
 
                     b.Property<string>("RoleName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Updated_By")
                         .IsRequired()
@@ -613,6 +631,9 @@ namespace Web.API.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RoleName")
+                        .IsUnique();
 
                     b.ToTable("HRRole");
                 });

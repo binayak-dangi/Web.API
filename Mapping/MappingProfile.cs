@@ -8,13 +8,13 @@ namespace Web.API.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<HRRole, HRRoleDto>().ReverseMap();
-            CreateMap<HRBranch, HRBranchDto>().ReverseMap();
-            CreateMap<HRCompany, HRCompanyDto>().ReverseMap();
-            CreateMap<HREmployee, HREmployeeDto>().ReverseMap();
-            CreateMap<HRCorporateTitle, HRCorporateTitleDto>().ReverseMap();
-            CreateMap<HRFunctionalTitle, HRFunctionalTitleDto>().ReverseMap();
-            CreateMap<HRPermission, HRPermissionDto>().ReverseMap();
+            CreateMap<HRRole, HRRoleDto>().ReverseMap().ForMember(dest => dest.Id, opt => opt.Ignore());
+            CreateMap<HRBranch, HRBranchDto>().ReverseMap().ForMember(dest => dest.Id, opt => opt.Ignore());
+            CreateMap<HRCompany, HRCompanyDto>().ReverseMap().ForMember(dest => dest.Id, opt => opt.Ignore());
+            CreateMap<HREmployee, HREmployeeDto>().ReverseMap().ForMember(dest => dest.Id, opt => opt.Ignore());
+            CreateMap<HRCorporateTitle, HRCorporateTitleDto>().ReverseMap().ForMember(dest => dest.Id, opt => opt.Ignore());
+            CreateMap<HRFunctionalTitle, HRFunctionalTitleDto>().ReverseMap().ForMember(dest => dest.Id, opt => opt.Ignore());
+            CreateMap<HRPermission, HRPermissionDto>().ReverseMap().ForMember(dest => dest.Id, opt => opt.Ignore());
         }
     }
 }
