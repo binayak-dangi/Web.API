@@ -14,18 +14,18 @@ namespace Web.API.Controllers.Setup
     public class HRCorporateTitleController : ControllerBase
     {
         private readonly ILogger<HRCorporateTitleController> _logger;
-        private readonly IHRCorporateTitleRepository _hrCorporateTitleService;
+        private readonly IHRCorporateTitleRepository _hrCorporateTitleRepository;
 
-        public HRCorporateTitleController(ILogger<HRCorporateTitleController> logger,IHRCorporateTitleRepository hrCorporateTitleService)
+        public HRCorporateTitleController(ILogger<HRCorporateTitleController> logger,IHRCorporateTitleRepository hrCorporateTitleRepository)
         {
             _logger = logger;
-            _hrCorporateTitleService = hrCorporateTitleService;
+            _hrCorporateTitleRepository = hrCorporateTitleRepository;
         }
 
         [HttpGet(Name = "GetCorporateTitles")]
         public async Task<IActionResult> GetCorporateTitles([FromQuery] PaginationModel pagination)
         {
-            var corporateTitles = await _hrCorporateTitleService.GetAllAsync(pagination);
+            var corporateTitles = await _hrCorporateTitleRepository.GetAllAsync(pagination);
 
             return Ok(new ApiResponseModel<PagedResult<HRCorporateTitleDto>>
             {
@@ -38,7 +38,7 @@ namespace Web.API.Controllers.Setup
         [HttpGet("{id}", Name = "GetCorporateTitleById")]
         public async Task<IActionResult> GetCorporateTitleById(long id)
         {
-            var corporateTitle = await _hrCorporateTitleService.GetByIdAsync(id);
+            var corporateTitle = await _hrCorporateTitleRepository.GetByIdAsync(id);
             if (corporateTitle == null)
             {
                 return BadRequest(new ApiResponseModel<object>
@@ -72,7 +72,16 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                var corporateTitle = await _hrCorporateTitleService.CreateAsync(corporateTitleDto);
+                if (await _hrCorporateTitleRepository.IsCorporateTitleExist(null, corporateTitleDto))
+                {
+                    return Conflict(new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        Message = "Corporate title already exists."
+                    });
+                }
+
+                var corporateTitle = await _hrCorporateTitleRepository.CreateAsync(corporateTitleDto);
 
                 return Ok(new ApiResponseModel<HRCorporateTitleDto>
                 {
@@ -110,7 +119,16 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                var corporateTitle = await _hrCorporateTitleService.UpdateAsync(id,corporateTitleDto);
+                if (await _hrCorporateTitleRepository.IsCorporateTitleExist(id, corporateTitleDto))
+                {
+                    return Conflict(new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        Message = "Corporate title already exists."
+                    });
+                }
+
+                var corporateTitle = await _hrCorporateTitleRepository.UpdateAsync(id,corporateTitleDto);
 
                 if (corporateTitle == null)
                 {
@@ -158,7 +176,7 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                var deletedCorporateTitle = await _hrCorporateTitleService.SoftDeleteAsyncs(id);
+                var deletedCorporateTitle = await _hrCorporateTitleRepository.SoftDeleteAsyncs(id);
 
                 if (deletedCorporateTitle == null)
                 {

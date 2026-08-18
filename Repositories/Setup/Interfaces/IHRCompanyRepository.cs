@@ -6,6 +6,6 @@ namespace Web.API.Repositories.Setup.Interfaces
 {
     public interface IHRCompanyRepository: IBaseRepository<HRCompanyDto>
     {
-      
+        Task<bool> IsCompanyExist(long? id, HRCompanyDto dto);
     }
 }

@@ -14,18 +14,18 @@ namespace Web.API.Controllers.Setup
     public class HRFunctionalTitleController : ControllerBase
     {
         private readonly ILogger<HRFunctionalTitleController> _logger;
-        private readonly IHRFunctionalTitleRepository _hrFunctionalTitleService;
+        private readonly IHRFunctionalTitleRepository _hrFunctionalTitleRepository;
 
-        public HRFunctionalTitleController(ILogger<HRFunctionalTitleController> logger,IHRFunctionalTitleRepository hrFunctionalTitleService)
+        public HRFunctionalTitleController(ILogger<HRFunctionalTitleController> logger,IHRFunctionalTitleRepository hrFunctionalTitleRepository)
         {
             _logger = logger;
-            _hrFunctionalTitleService = hrFunctionalTitleService;
+            _hrFunctionalTitleRepository = hrFunctionalTitleRepository;
         }
 
         [HttpGet(Name = "GetFunctionalTitles")]
         public async Task<IActionResult> GetFunctionalTitles([FromQuery] PaginationModel pagination)
         {
-            var functionalTitles = await _hrFunctionalTitleService.GetAllAsync(pagination);
+            var functionalTitles = await _hrFunctionalTitleRepository.GetAllAsync(pagination);
 
             return Ok(new ApiResponseModel<PagedResult<HRFunctionalTitleDto>>
             {
@@ -38,7 +38,7 @@ namespace Web.API.Controllers.Setup
         [HttpGet("{id}", Name = "GetFunctionalTitleById")]
         public async Task<IActionResult> GetFunctionalTitleById(long id)
         {
-            var functionalTitle = await _hrFunctionalTitleService.GetByIdAsync(id);
+            var functionalTitle = await _hrFunctionalTitleRepository.GetByIdAsync(id);
             if (functionalTitle == null)
             {
                 return BadRequest(new ApiResponseModel<object>
@@ -72,7 +72,17 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                var functionalTitle = await _hrFunctionalTitleService.CreateAsync(functionalTitleDto);
+                if(await _hrFunctionalTitleRepository.IsFunctionalTitleExist(null, functionalTitleDto))
+                {
+                    return Conflict(new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        Message = $"Functional Title '{functionalTitleDto.PositionHead}' already exists.",
+                        Data = null
+                    });
+                }
+
+                var functionalTitle = await _hrFunctionalTitleRepository.CreateAsync(functionalTitleDto);
 
                 return Ok(new ApiResponseModel<HRFunctionalTitleDto>
                 {
@@ -110,7 +120,17 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                var functionalTitle = await _hrFunctionalTitleService.UpdateAsync(id, functionalTitleDto);
+                if(await _hrFunctionalTitleRepository.IsFunctionalTitleExist(id, functionalTitleDto))
+                {
+                    return Conflict(new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        Message = $"Functional Title '{functionalTitleDto.PositionHead}' already exists.",
+                        Data = null
+                    });
+                }
+
+                var functionalTitle = await _hrFunctionalTitleRepository.UpdateAsync(id, functionalTitleDto);
 
                 if (functionalTitle == null)
                 {
@@ -158,7 +178,7 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                var deletedFunctionalTitle = await _hrFunctionalTitleService.SoftDeleteAsyncs(id);
+                var deletedFunctionalTitle = await _hrFunctionalTitleRepository.SoftDeleteAsyncs(id);
 
                 if (deletedFunctionalTitle == null)
                 {

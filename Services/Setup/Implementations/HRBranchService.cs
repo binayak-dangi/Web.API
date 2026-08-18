@@ -15,9 +15,9 @@ namespace Web.API.Services.Setup.Implementations
             _hrBranchRepository = hrBranchRepository;
         }
 
-        public async Task<bool> IsBranchExist(HRBranchDto dto)
-        {
-            return await _hrBranchRepository.IsBranchExist(dto);
-        }
+        //public async Task<bool> IsBranchExist(HRBranchDto dto)
+        //{
+        //    return await _hrBranchRepository.IsBranchExist(dto);
+        //}
     }
 }

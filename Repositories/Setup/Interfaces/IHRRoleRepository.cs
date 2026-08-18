@@ -5,6 +5,6 @@ namespace Web.API.Repositories.Setup.Interfaces
 {
     public interface IHRRoleRepository: IBaseRepository<HRRoleDto>
     {
-       
+        Task<bool> IsRoleExist(long? id, HRRoleDto dto);
     }
 }

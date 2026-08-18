@@ -13,18 +13,18 @@ namespace Web.API.Controllers.Setup
     public class HRRoleController : ControllerBase
     {
         private readonly ILogger<HRRoleController> _logger;
-        private readonly IHRRoleRepository _hrRoleService;
+        private readonly IHRRoleRepository _hrRoleRepository;
 
-        public HRRoleController(ILogger<HRRoleController> logger,IHRRoleRepository hrRoleService)
+        public HRRoleController(ILogger<HRRoleController> logger,IHRRoleRepository hrRoleRepository)
         {
             _logger = logger;
-            _hrRoleService = hrRoleService;
+            _hrRoleRepository = hrRoleRepository;
         }
 
         [HttpGet(Name = "GetRoles")]
         public async Task<IActionResult> GetRole([FromQuery] PaginationModel pagination)
         {
-            var roles = await _hrRoleService.GetAllAsync(pagination);
+            var roles = await _hrRoleRepository.GetAllAsync(pagination);
 
             return Ok(new ApiResponseModel<PagedResult<HRRoleDto>>
             {
@@ -37,7 +37,7 @@ namespace Web.API.Controllers.Setup
         [HttpGet("{id}", Name = "GetRoleById")]
         public async Task<IActionResult> GetRoleById(long id)
         {
-            var role = await _hrRoleService.GetByIdAsync(id);
+            var role = await _hrRoleRepository.GetByIdAsync(id);
             if (role == null)
             {
                 return BadRequest(new ApiResponseModel<object>
@@ -71,9 +71,18 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
+                if(await _hrRoleRepository.IsRoleExist(null,roleDto))
+                {
+                    return BadRequest(new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        Message = $"Role with name '{roleDto.RoleName}' already exists.",
+                        Data = null
+                    });
+                }
 
 
-                var role = await _hrRoleService.CreateAsync(roleDto);
+                var role = await _hrRoleRepository.CreateAsync(roleDto);
 
                 return Ok(new ApiResponseModel<HRRoleDto>
                 {
@@ -111,7 +120,17 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                var role = await _hrRoleService.UpdateAsync(id, roleDto);
+                if(await _hrRoleRepository.IsRoleExist(id,roleDto))
+                {
+                    return BadRequest(new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        Message = $"Role with name '{roleDto.RoleName}' already exists.",
+                        Data = null
+                    });
+                }
+
+                var role = await _hrRoleRepository.UpdateAsync(id, roleDto);
 
                 if (role == null)
                 {
@@ -159,7 +178,7 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                var deletedRole = await _hrRoleService.SoftDeleteAsyncs(id);
+                var deletedRole = await _hrRoleRepository.SoftDeleteAsyncs(id);
 
                 if (deletedRole == null)
                 {

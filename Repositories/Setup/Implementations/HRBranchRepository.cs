@@ -18,20 +18,11 @@ namespace Web.API.Repositories.Setup.Implementations
         {
         }
 
-        public async Task<bool> IsBranchExist(HRBranchDto dto)
+        public async Task<bool> IsBranchExist(long? id, HRBranchDto dto)
         {
-            bool exists;
-
-            if (dto.Id > 0) // Update
-            {
-                exists = await _context.HRBranch.AnyAsync(x => x.BranchName == dto.BranchName && x.Id != dto.Id);
-            }
-            else // Create
-            {
-                exists = await _context.HRBranch.AnyAsync(x => x.BranchName == dto.BranchName);
-            }
-
-            return exists;
+            var result= await _context.HRBranch
+                .AnyAsync(x => x.BranchName == dto.BranchName && (!id.HasValue || x.Id != id.Value));
+            return result;
         }
 
     }

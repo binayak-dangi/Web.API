@@ -14,18 +14,18 @@ namespace Web.API.Controllers.Setup
     public class HRPermissionController : ControllerBase
     {
         private readonly ILogger<HRPermissionController> _logger;
-        private readonly IHRPermissionRepository _hrPermissionService;
+        private readonly IHRPermissionRepository _hrPermissionRepository;
 
-        public HRPermissionController(ILogger<HRPermissionController> logger, IHRPermissionRepository hrPermissionService)
+        public HRPermissionController(ILogger<HRPermissionController> logger, IHRPermissionRepository hrPermissionRepository)
         {
             _logger = logger;
-            _hrPermissionService = hrPermissionService;
+            _hrPermissionRepository = hrPermissionRepository;
         }
 
         [HttpGet(Name = "GetPermissions")]
         public async Task<IActionResult> GetPermissions([FromQuery] PaginationModel pagination)
         {
-            var permissions = await _hrPermissionService.GetAllAsync(pagination);
+            var permissions = await _hrPermissionRepository.GetAllAsync(pagination);
 
             return Ok(new ApiResponseModel<PagedResult<HRPermissionDto>>
             {
@@ -38,7 +38,7 @@ namespace Web.API.Controllers.Setup
         [HttpGet("{id}", Name = "GetPermissionById")]
         public async Task<IActionResult> GetPermissionById(long id)
         {
-            var permission = await _hrPermissionService.GetByIdAsync(id);
+            var permission = await _hrPermissionRepository.GetByIdAsync(id);
             if (permission == null)
             {
                 return BadRequest(new ApiResponseModel<object>
@@ -72,7 +72,7 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                var permission = await _hrPermissionService.UpdateAsync(id, permissionDto);
+                var permission = await _hrPermissionRepository.UpdateAsync(id, permissionDto);
 
                 if (permission == null)
                 {
@@ -119,7 +119,7 @@ namespace Web.API.Controllers.Setup
                 });
             }
 
-            var permissions = await _hrPermissionService.GetPermissionsLst("HRPermissionByRole", "GetAssignedPermissionList", id.Value);
+            var permissions = await _hrPermissionRepository.GetPermissionsLst("HRPermissionByRole", "GetAssignedPermissionList", id.Value);
 
             return Ok(new ApiResponseModel<List<HRPermissionEmployeeRoleDto>>
             {
@@ -141,7 +141,7 @@ namespace Web.API.Controllers.Setup
                 });
             }
 
-            var permissions = await _hrPermissionService.GetPermissionsLst("HRPermissionByRole", "GetAllPermissionList", id.Value);
+            var permissions = await _hrPermissionRepository.GetPermissionsLst("HRPermissionByRole", "GetAllPermissionList", id.Value);
 
             return Ok(new ApiResponseModel<List<HRPermissionEmployeeRoleDto>>
             {
@@ -187,9 +187,9 @@ namespace Web.API.Controllers.Setup
                     IdHRRole = id
                 }).ToList();
 
-                await _hrPermissionService.CreateRolePermisionLinkAsync(rolePermissionLinks);
+                await _hrPermissionRepository.CreateRolePermisionLinkAsync(rolePermissionLinks);
 
-                var result = await _hrPermissionService.GetPermissionsLst("HRPermissionByRole", "BulkUpdatePermissionList", id);
+                var result = await _hrPermissionRepository.GetPermissionsLst("HRPermissionByRole", "BulkUpdatePermissionList", id);
 
                 return Ok(new ApiResponseModel<object>
                 {
@@ -227,7 +227,7 @@ namespace Web.API.Controllers.Setup
                 });
             }
 
-            var permissions = await _hrPermissionService.GetPermissionsLst("HRPermissionByEmployee", "GetAssignedPermissionList", id.Value);
+            var permissions = await _hrPermissionRepository.GetPermissionsLst("HRPermissionByEmployee", "GetAssignedPermissionList", id.Value);
 
             return Ok(new ApiResponseModel<List<HRPermissionEmployeeRoleDto>>
             {
@@ -249,7 +249,7 @@ namespace Web.API.Controllers.Setup
                 });
             }
 
-            var permissions = await _hrPermissionService.GetPermissionsLst("HRPermissionByEmployee", "GetAllPermissionList", id.Value);
+            var permissions = await _hrPermissionRepository.GetPermissionsLst("HRPermissionByEmployee", "GetAllPermissionList", id.Value);
 
             return Ok(new ApiResponseModel<List<HRPermissionEmployeeRoleDto>>
             {
@@ -295,9 +295,9 @@ namespace Web.API.Controllers.Setup
                     IdHREmployee = id
                 }).ToList();
 
-                await _hrPermissionService.CreateEmployeePermissionLinkAsync(employeePermissionLinks);
+                await _hrPermissionRepository.CreateEmployeePermissionLinkAsync(employeePermissionLinks);
 
-                var result = await _hrPermissionService.GetPermissionsLst("HRPermissionByEmployee", "BulkUpdatePermissionList", id);
+                var result = await _hrPermissionRepository.GetPermissionsLst("HRPermissionByEmployee", "BulkUpdatePermissionList", id);
 
                 return Ok(new ApiResponseModel<object>
                 {
@@ -334,7 +334,7 @@ namespace Web.API.Controllers.Setup
                 });
             }
 
-            var permissions = await _hrPermissionService.GetPermissionsLst("GetPermissionMenuLst", "", id.Value);
+            var permissions = await _hrPermissionRepository.GetPermissionsLst("GetPermissionMenuLst", "", id.Value);
 
             return Ok(new ApiResponseModel<List<HRPermissionEmployeeRoleDto>>
             {

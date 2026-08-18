@@ -12,18 +12,18 @@ namespace Web.API.Controllers.Setup
     public class HRCompanyController : ControllerBase
     {
         private readonly ILogger<HRCompanyController> _logger;
-        private readonly IHRCompanyRepository _hrCompanyService;
+        private readonly IHRCompanyRepository _hrCompanyRepository;
        
-        public HRCompanyController(ILogger<HRCompanyController> logger,IHRCompanyRepository hrCompanyService)
+        public HRCompanyController(ILogger<HRCompanyController> logger,IHRCompanyRepository hrCompanyRepository)
         {
             _logger = logger;
-            _hrCompanyService = hrCompanyService;
+            _hrCompanyRepository = hrCompanyRepository;
         }
 
         [HttpGet(Name = "GetCompanies")]
         public async Task<IActionResult> GetCompanies([FromQuery] PaginationModel pagination)
         {
-            var companies = await _hrCompanyService.GetAllAsync(pagination);
+            var companies = await _hrCompanyRepository.GetAllAsync(pagination);
 
             return Ok(new ApiResponseModel<PagedResult<HRCompanyDto>>
             {
@@ -36,7 +36,7 @@ namespace Web.API.Controllers.Setup
         [HttpGet("{id}", Name = "GetCompanyById")]
         public async Task<IActionResult> GetCompanyById(long id)
         {
-            var company = await _hrCompanyService.GetByIdAsync(id);
+            var company = await _hrCompanyRepository.GetByIdAsync(id);
             if (company == null)
             {
                 return BadRequest(new ApiResponseModel<object>
@@ -70,7 +70,16 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                var company = await _hrCompanyService.CreateAsync(companyDto);
+                if (await _hrCompanyRepository.IsCompanyExist(null, companyDto))
+                {
+                    return Conflict(new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        Message = "Company name already exists."
+                    });
+                }
+
+                var company = await _hrCompanyRepository.CreateAsync(companyDto);
 
                 return Ok(new ApiResponseModel<HRCompanyDto>
                 {
@@ -108,7 +117,16 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                var company = await _hrCompanyService.UpdateAsync(id,companyDto);
+                if (await _hrCompanyRepository.IsCompanyExist(id, companyDto))
+                {
+                    return Conflict(new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        Message = "Company name already exists."
+                    });
+                }
+
+                var company = await _hrCompanyRepository.UpdateAsync(id,companyDto);
 
                 if (company == null)
                 {
@@ -156,7 +174,7 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                var deletedCompany = await _hrCompanyService.SoftDeleteAsyncs(id);
+                var deletedCompany = await _hrCompanyRepository.SoftDeleteAsyncs(id);
 
                 if (deletedCompany == null)
                 {

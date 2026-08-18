@@ -6,6 +6,6 @@ namespace Web.API.Repositories.Setup.Interfaces
 {
     public interface IHRBranchRepository : IBaseRepository< HRBranchDto>
     {
-        Task<bool> IsBranchExist(HRBranchDto dto);
+        Task<bool> IsBranchExist(long? id, HRBranchDto dto);
     }
 }

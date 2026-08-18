@@ -18,6 +18,12 @@ namespace Web.API.Repositories.Setup.Implementations
             _configuration = configuration;
         }
 
+        public async Task<bool> IsEmployeeExist(long? id, HREmployeeDto dto)
+        {
+            var result = await _context.HREmployee
+                .AnyAsync(x => x.Username == dto.Username && (!id.HasValue || x.Id != id.Value));
+            return result;
+        }
 
         public async Task<HREmployeeDto> CreateEmployeeAsync(HREmployeeDto employeeDto)
         {
@@ -56,11 +62,11 @@ namespace Web.API.Repositories.Setup.Implementations
             return _mapper.Map<HREmployeeDto>(employee);
         }
 
-        public async Task<HREmployeeDto?> ResetPasswordAsync(HREmployeeDto employeeDto)
+        public async Task<HREmployeeDto?> ResetPasswordAsync(long id)
         {
             var employee = await _context.HREmployee
                 .Include(x => x.HRRole)
-                .FirstOrDefaultAsync(x => x.Id == employeeDto.Id);
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             if (employee == null)
                 return null;

@@ -16,6 +16,12 @@ namespace Web.API.Repositories.Setup.Implementations
         {
         }
 
+        public async Task<bool> IsPermissionExist(long? id, HRPermissionDto dto)
+        {
+            var result = await _context.HRPermission
+                .AnyAsync(x => x.Title == dto.Title && (!id.HasValue || x.Id != id.Value));
+            return result;
+        }
 
         public async Task<List<HRPermissionEmployeeRoleDto>> GetPermissionsLst(string paramFor,string paramType,long idReference)
         {

@@ -12,11 +12,13 @@ public class AuthController : ControllerBase
 {
     private readonly IAuthRepository _authService;
     private readonly ILogger<AuthController> _logger;
+    private readonly IWebHostEnvironment _environment;
 
-    public AuthController(IAuthRepository authService, ILogger<AuthController> logger)
+    public AuthController(IAuthRepository authService, ILogger<AuthController> logger, IWebHostEnvironment environment)
     {
         _authService = authService;
         _logger = logger;
+        _environment = environment;
     }
 
     [HttpPost("login")]
@@ -52,7 +54,7 @@ public class AuthController : ControllerBase
         Response.Cookies.Append("refreshToken", result.RefreshToken, new CookieOptions
         {
             HttpOnly = true,
-            Secure = false,               // false only during local HTTP development
+            Secure = _environment.IsProduction(),               // false only during local HTTP development
             SameSite = SameSiteMode.Lax,
             Expires = result.ExpiresAt
         });
@@ -93,7 +95,7 @@ public class AuthController : ControllerBase
         Response.Cookies.Append("refreshToken", result.RefreshToken, new CookieOptions
         {
             HttpOnly = true,
-            Secure = false,
+            Secure = _environment.IsProduction(),
             SameSite = SameSiteMode.Lax,
             Expires = result.ExpiresAt
         });

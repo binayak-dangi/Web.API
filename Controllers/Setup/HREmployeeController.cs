@@ -75,6 +75,16 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
+                if(await _employeeRepository.IsUsernameAvailableAsync(employeeDto.Username) == false)
+                {
+                    return Conflict(new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        Message = "Username is already taken.",
+                        Data = null
+                    });
+                }
+
                 var employee = await _employeeRepository.CreateEmployeeAsync(employeeDto);
 
                 return Ok(new ApiResponseModel<HREmployeeDto>
@@ -217,8 +227,7 @@ namespace Web.API.Controllers.Setup
                     Id = id
                 };
 
-                var result =
-                    await _employeeRepository.ResetPasswordAsync(employeeDto);
+                var result = await _employeeRepository.ResetPasswordAsync(id);
 
                 if (result == null)
                 {
@@ -255,49 +264,49 @@ namespace Web.API.Controllers.Setup
             }
         }
 
-        [HttpGet("check-username")]
-        public async Task<IActionResult> CheckUsername(string username)
-        {
-            if (string.IsNullOrWhiteSpace(username))
-            {
-                return BadRequest(new ApiResponseModel<object>
-                {
-                    Success = false,
-                    Message = "Username is required.",
-                    Data = null
-                });
-            }
+        //[HttpGet("check-username")]
+        //public async Task<IActionResult> CheckUsername(string username)
+        //{
+        //    if (string.IsNullOrWhiteSpace(username))
+        //    {
+        //        return BadRequest(new ApiResponseModel<object>
+        //        {
+        //            Success = false,
+        //            Message = "Username is required.",
+        //            Data = null
+        //        });
+        //    }
 
-            username = username.Trim().ToLower();
+        //    username = username.Trim().ToLower();
 
-            if (username.Length < 5)
-            {
-                return Ok(new ApiResponseModel<object>
-                {
-                    Success = true,
-                    Message = "Username must be at least 5 characters long.",
-                    Data = new
-                    {
-                        IsAvailable = false
-                    }
-                });
-            }
+        //    if (username.Length < 5)
+        //    {
+        //        return Ok(new ApiResponseModel<object>
+        //        {
+        //            Success = true,
+        //            Message = "Username must be at least 5 characters long.",
+        //            Data = new
+        //            {
+        //                IsAvailable = false
+        //            }
+        //        });
+        //    }
 
-            bool isAvailable =
-                await _employeeRepository.IsUsernameAvailableAsync(username);
+        //    bool isAvailable =
+        //        await _employeeRepository.IsUsernameAvailableAsync(username);
 
-            return Ok(new ApiResponseModel<object>
-            {
-                Success = true,
-                Message = isAvailable
-                    ? "Username is available."
-                    : "Username is unavailable.",
-                Data = new
-                {
-                    IsAvailable = isAvailable
-                }
-            });
-        }
+        //    return Ok(new ApiResponseModel<object>
+        //    {
+        //        Success = true,
+        //        Message = isAvailable
+        //            ? "Username is available."
+        //            : "Username is unavailable.",
+        //        Data = new
+        //        {
+        //            IsAvailable = isAvailable
+        //        }
+        //    });
+        //}
        
     }
 }

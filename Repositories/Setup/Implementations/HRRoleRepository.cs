@@ -15,6 +15,11 @@ namespace Web.API.Repositories.Setup.Implementations
             : base(context, mapper, validator)
         {
         }
-
+        public async Task<bool> IsRoleExist(long? id, HRRoleDto dto)
+        {
+            var result = await _context.HRRole
+                .AnyAsync(x => x.RoleName == dto.RoleName && (!id.HasValue || x.Id != id.Value));
+            return result;
+        }
     }
 }

@@ -71,7 +71,7 @@ namespace Web.API.Controllers.Setup
                 }
 
 
-                if (await _hrBranchService.IsBranchExist(branchDto))
+                if (await _hrBranchService.IsBranchExist(null,branchDto))
                 {
                     return Conflict(new ApiResponseModel<object>
                     {
@@ -117,7 +117,7 @@ namespace Web.API.Controllers.Setup
                     });
                 }
 
-                if (await _hrBranchService.IsBranchExist(branchDto))
+                if (await _hrBranchService.IsBranchExist(id,branchDto))
                 {
                     return Conflict(new ApiResponseModel<object>
                     {

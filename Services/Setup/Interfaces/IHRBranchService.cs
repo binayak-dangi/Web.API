@@ -6,7 +6,7 @@ namespace Web.API.Services.Setup.Interfaces
 {
     public interface IHRBranchService: IBaseService<HRBranchDto>
     {
-        Task<bool> IsBranchExist(HRBranchDto dto);
+        //Task<bool> IsBranchExist(HRBranchDto dto);
 
     }
 }
