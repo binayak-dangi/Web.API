@@ -15,6 +15,9 @@ namespace Web.API.Mapping
             CreateMap<HRCorporateTitle, HRCorporateTitleDto>().ReverseMap().ForMember(dest => dest.Id, opt => opt.Ignore());
             CreateMap<HRFunctionalTitle, HRFunctionalTitleDto>().ReverseMap().ForMember(dest => dest.Id, opt => opt.Ignore());
             CreateMap<HRPermission, HRPermissionDto>().ReverseMap().ForMember(dest => dest.Id, opt => opt.Ignore());
+            CreateMap<AdmMainHeading, AdmMainHeadingDto>().ReverseMap().ForMember(dest => dest.Id, opt => opt.Ignore());
+            CreateMap<AdmHeading, AdmHeadingDto>().ReverseMap().ForMember(dest => dest.Id, opt => opt.Ignore());
+            CreateMap<AdmElement, AdmElementDto>().ReverseMap().ForMember(dest => dest.Id, opt => opt.Ignore());
         }
     }
 }

@@ -34,7 +34,10 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IJwtRepository, JwtRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IHRPermissionRepository, HRPermissionRepository>();
-//builder.Services.AddScoped<IActivityLogRepository, ActivityLogRepository>();
+builder.Services.AddScoped<IActivityLogRepository, ActivityLogRepository>();
+builder.Services.AddScoped<IAdmMainHeadingRepository, AdmMainHeadingRepository>();
+builder.Services.AddScoped<IAdmHeadingRepository, AdmHeadingRepository>();
+builder.Services.AddScoped<IAdmElementRepository, AdmElementRepository>();
 //Add Swagger
 builder.Services.AddEndpointsApiExplorer();
 //Add Authorize in swagger

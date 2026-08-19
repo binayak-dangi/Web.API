@@ -54,9 +54,10 @@ public class AuthController : ControllerBase
         Response.Cookies.Append("refreshToken", result.RefreshToken, new CookieOptions
         {
             HttpOnly = true,
-            Secure = _environment.IsProduction(),               // false only during local HTTP development
-            SameSite = SameSiteMode.Lax,
-            Expires = result.ExpiresAt
+            Secure = Request.IsHttps,
+            SameSite = Request.IsHttps ? SameSiteMode.None : SameSiteMode.Lax,
+            Expires = result.ExpiresAt,
+            Path = "/"
         });
 
         // Don't send RefreshToken back to React
@@ -95,9 +96,10 @@ public class AuthController : ControllerBase
         Response.Cookies.Append("refreshToken", result.RefreshToken, new CookieOptions
         {
             HttpOnly = true,
-            Secure = _environment.IsProduction(),
-            SameSite = SameSiteMode.Lax,
-            Expires = result.ExpiresAt
+            Secure = Request.IsHttps,
+            SameSite = Request.IsHttps ? SameSiteMode.None : SameSiteMode.Lax,
+            Expires = result.ExpiresAt,
+            Path = "/"
         });
 
         result.RefreshToken = null;

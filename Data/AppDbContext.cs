@@ -24,7 +24,9 @@ namespace Web.API.Data
         public DbSet<HRFunctionalTitle> HRFunctionalTitle { get; set; }
         public DbSet<RefreshToken> RefreshToken { get; set; }
         public DbSet<ActivityLog> ActivityLog { get; set; }
-
+        public DbSet<AdmMainHeading> Adm_MainHeading { get; set; }
+        public DbSet<AdmHeading> Adm_Heading { get; set; }
+        public DbSet<AdmElement> Adm_Element { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
