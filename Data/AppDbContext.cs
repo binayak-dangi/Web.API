@@ -27,6 +27,9 @@ namespace Web.API.Data
         public DbSet<AdmMainHeading> Adm_MainHeading { get; set; }
         public DbSet<AdmHeading> Adm_Heading { get; set; }
         public DbSet<AdmElement> Adm_Element { get; set; }
+        public DbSet<HREmailTemplate> HREmailTemplate { get; set; }
+        public DbSet<HRSmsTemplate> HRSmsTemplate { get; set; }
+        public DbSet<EventLog> EventLog { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

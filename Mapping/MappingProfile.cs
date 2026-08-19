@@ -18,6 +18,8 @@ namespace Web.API.Mapping
             CreateMap<AdmMainHeading, AdmMainHeadingDto>().ReverseMap().ForMember(dest => dest.Id, opt => opt.Ignore());
             CreateMap<AdmHeading, AdmHeadingDto>().ReverseMap().ForMember(dest => dest.Id, opt => opt.Ignore());
             CreateMap<AdmElement, AdmElementDto>().ReverseMap().ForMember(dest => dest.Id, opt => opt.Ignore());
+            CreateMap<HREmailTemplate, HREmailTemplateDto>().ReverseMap().ForMember(dest => dest.Id, opt => opt.Ignore());
+            CreateMap<HRSmsTemplate, HRSmsTemplateDto>().ReverseMap().ForMember(dest => dest.Id, opt => opt.Ignore());
         }
     }
 }

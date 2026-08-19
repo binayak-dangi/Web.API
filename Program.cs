@@ -38,6 +38,8 @@ builder.Services.AddScoped<IActivityLogRepository, ActivityLogRepository>();
 builder.Services.AddScoped<IAdmMainHeadingRepository, AdmMainHeadingRepository>();
 builder.Services.AddScoped<IAdmHeadingRepository, AdmHeadingRepository>();
 builder.Services.AddScoped<IAdmElementRepository, AdmElementRepository>();
+builder.Services.AddScoped<IHREmailTemplateRepository, HREmailTemplateRepository>();
+builder.Services.AddScoped<IHRSmsTemplateRepository, HRSmsTemplateRepository>();
 //Add Swagger
 builder.Services.AddEndpointsApiExplorer();
 //Add Authorize in swagger
